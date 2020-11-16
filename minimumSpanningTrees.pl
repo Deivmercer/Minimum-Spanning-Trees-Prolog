@@ -11,9 +11,9 @@ vertex(grafo, 1).
 vertex(grafo, 2).
 vertex(grafo, 3).
 vertex(grafo, 4).
-arc(grafo, 1, 2).
-arc(grafo, 2, 3).
-arc(grafo, 1, 4).
+arc(grafo, 1, 2, 1).
+arc(grafo, 2, 3, 1).
+arc(grafo, 1, 4, 1).
 
 %%% Graph
 % Questo predicato inserisce un nuovo grafo nella base-dati Prolog.
@@ -81,21 +81,27 @@ list_graph(G) :-
 % Questo predicato legge un “grafo” G, da un file FileName e lo inserisce nel data base di Prolog.
 read_graph(G, FileName) :-
     csv_read_file(FileName, Rows, [functor(arc), arity(3), separator(0'\t)]),
-    write(Rows),
-    maplist(prepare_result(G), Rows).
+    maplist(assert_results(G), Rows).
 
-prepare_result(G, Rows) :-
-    Rows =.. U,
-    store_results(G, U).
-
-store_results(G, [R | Rs]) :-
+assert_results(G, Rows) :-
+    Rows =.. [R | Rs],
     Arc =.. [R, G | Rs],
     assert(Arc).
 
 % Questo predicato è vero quando G viene scritto sul file FileName secondo il valore dell’argomento Type. Type può essere graph o edges.
-% TODO: write_graph(G, FileName) :-
-%    write_graph(G, FileName, graph).
+write_graph(G, FileName) :-
+   write_graph(G, FileName, graph).
 
-%write_graph(G, FileName, graph) :-
+write_graph(G, FileName, graph) :-
+    arcs(G, Es),
+    maplist(prepare_output, Es, Rows),
+    csv_write_file(FileName, Rows, [separator(0'\t)]).
+ 
+write_graph(G, FileName, edges) :-
+    write(G),
+    maplist(prepare_output, G, Rows),
+    csv_write_file(FileName, Rows, [separator(0'\t)]).
 
-% write_graph(G, FileName, edges) :-
+prepare_output(Arc, Row) :-
+    Arc =.. [P, _ | Gs],
+    Row =.. [P | Gs].
