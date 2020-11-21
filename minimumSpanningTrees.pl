@@ -1,6 +1,7 @@
 :- use_module(library(csv)).
 
-%%% Predicati definiti dinamicamente
+%%% Graph
+% Predicati definiti dinamicamente
 :- dynamic graph/1.
 :- dynamic vertex/2.
 :- dynamic arc/4.
@@ -15,7 +16,6 @@ arc(grafo, 1, 2, 1).
 arc(grafo, 2, 3, 1).
 arc(grafo, 1, 4, 1).
 
-%%% Graph
 % Questo predicato inserisce un nuovo grafo nella base-dati Prolog.
 new_graph(G) :- 
     graph(G), 
@@ -98,10 +98,77 @@ write_graph(G, FileName, graph) :-
     csv_write_file(FileName, Rows, [separator(0'\t)]).
  
 write_graph(G, FileName, edges) :-
-    write(G),
     maplist(prepare_output, G, Rows),
     csv_write_file(FileName, Rows, [separator(0'\t)]).
 
 prepare_output(Arc, Row) :-
     Arc =.. [P, _ | Gs],
     Row =.. [P | Gs].
+
+%%% MinHeap
+% Predicati definiti dinamicamente
+:- dynamic heap/2.
+:- dynamic heap_entry/4.
+
+% Fatti
+heap(heap, 1).
+heap_entry(heap, 1, 1, 1).
+
+% Questo predicato inserisce un nuovo heap nella base-dati Prolog.
+new_heap(H) :-
+    heap(H, _),
+    !.
+new_heap(H) :-
+    assert(heap(H, 0)),
+    !.
+
+% Rimuove tutto lo heap dalla base-dati Prolog.
+delete_heap(H) :-
+    retract(heap(H, _)),
+    retractall(heap_entry(H, _, _, _)).
+
+% Questo predicato è vero quando S è la dimensione corrente dello heap.
+heap_size(H, S) :-
+    heap(H, S).
+
+% Questo predicato è vero quando lo heap H non contiene elementi.
+heap_empty(H) :-
+    heap(H, 0).
+
+% Questo predicato è vero quando lo heap H contiene almeno un elemento
+heap_not_empty(H) :-
+    heap(H, S),
+    S > 0.
+
+% Il predicato è vero quando l’elemento dello heap H con chiave minima K è V.
+heap_head(H, K, V) :-
+    heap_not_empty(H),
+    heap_entry(H, 1, K, V).
+
+heap_insert(H, K, V) :-
+    heap(H, S),
+    retract(heap(H, S)),
+    S1 is S + 1,
+    assert(heap(H, S1)),
+    assert(heap_entry(H, S1, K, V)).
+
+% Il predicato è vero quando la coppia K, V con K minima, è rimossa dallo heap H.
+heap_extract(H, K, V) :-
+    heap(H, S),
+    retract(heap_entry(H, _, K, V)),
+    retract(heap(H, S)),
+    S1 is S - 1,
+    assert(heap(H, S1)).
+
+% Il predicato è vero quando la chiave OldKey (associata al valore V) è sostituita da NewKey.
+% N.B.: Predicato da implementare solo se è necessario. Per adesso ne creo una bozza, eventualmente lo elimino.
+modify_key(H, NewKey, OldKey, V) :-
+    heap(H, _),
+    heap_entry(H, S, OldKey, V),
+    retract(heap_entry(H, S, OldKey, V)),
+    assert(heap_entry(H, S, NewKey, V)).
+
+list_heap(H) :-
+    heap(H, _),
+    listing(heap(H, _)),
+    listing(heap_entry(H, _, _, _)).
