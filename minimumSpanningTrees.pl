@@ -64,9 +64,10 @@ neighbors(G, V, Ns) :-
     vertex(G, V),
     findall(arc(G, V, N, W), arc(G, V, N, W), Ns).
 
-% Questo predicato è vero quando V è un vertice di G e Vs è una lista contenente i vertici ad esso adiacenti; si noti che in un grafo non diretto si 
-% devono inserire nella lista Vs tutti i vertici adiacenti.
-% TODO: adjs(G, V, Vs). :-
+% Questo predicato è vero quando V è un vertice di G e Vs è una lista contenente i vertici ad esso adiacenti.
+adjs(G, V, Vs) :- 
+    vertex(G, V),
+    findall(vertex(G, U), arc(G, V, U, _), Vs).
 
 % Questo predicato stampa alla console dell’interprete Prolog una lista degli archi del grafo G.
 list_arcs(G) :-
