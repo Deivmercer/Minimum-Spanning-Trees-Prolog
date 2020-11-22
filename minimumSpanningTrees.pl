@@ -111,13 +111,26 @@ prepare_output(Arc, Row) :-
 :- dynamic heap_entry/4.
 
 % Fatti
-heap(heap, 1).
+heap(heap, 10).
+heap(seu, 2).
 heap_entry(heap, 1, 1, 1).
+heap_entry(heap, 2, 2, 2).
+heap_entry(heap, 3, 4, 4).
+heap_entry(heap, 4, 7, 7).
+heap_entry(heap, 5, 3, 3).
+heap_entry(heap, 6, 10, 10).
+heap_entry(heap, 7, 9, 9).
+heap_entry(heap, 8, 16, 16).
+heap_entry(heap, 9, 8, 8).
+heap_entry(heap, 10, 14, 14).
+heap_entry(seu, 1, 1, 1).
+heap_entry(seu, 2, 2, 2).
 
 % Questo predicato inserisce un nuovo heap nella base-dati Prolog.
 new_heap(H) :-
     heap(H, _),
     !.
+
 new_heap(H) :-
     assert(heap(H, 0)),
     !.
@@ -145,29 +158,186 @@ heap_head(H, K, V) :-
     heap_not_empty(H),
     heap_entry(H, 1, K, V).
 
+% Il predicato è vero quando l’elemento Vèinserito nelloheap Hcon chiave K.
 heap_insert(H, K, V) :-
     heap(H, S),
     retract(heap(H, S)),
     S1 is S + 1,
     assert(heap(H, S1)),
-    assert(heap_entry(H, S1, K, V)).
+    assert(heap_entry(H, S1, K, V)),
+    heapify_insert(H, S1).
+
+heapify_insert(_, I) :-
+    I =< 1,
+    !.
+
+heapify_insert(_, I) :-
+    P is floor(I / 2),
+    heap_entry(H, I, _, V),
+    heap_entry(H, P, _, PV),
+    V > PV,
+    !.
+
+heapify_insert(H, I) :-
+    P is floor(I / 2),
+    heap_entry(H, I, K, V),
+    heap_entry(H, P, PK, PV),
+    V < PV,
+    retract(heap_entry(H, I, K, V)),
+    retract(heap_entry(H, P, PK, PV)),
+    assert(heap_entry(H, P, K, V)),
+    assert(heap_entry(H, I, PK, PV)),
+    heapify_insert(H, P).
 
 % Il predicato è vero quando la coppia K, V con K minima, è rimossa dallo heap H.
+% TODO: In certe situazioni sembra dare più di una scelta, che non dovrebbe esserci e che comunque fallisce sempre
 heap_extract(H, K, V) :-
-    heap(H, S),
+    heap_entry(H, _, K, V),
+    heap_size(H, S),
+    compare(=, S, 1),
+    !,
     retract(heap_entry(H, _, K, V)),
+    retract(heap(H, S)),
+    assert(heap(H, 0)).
+
+heap_extract(H, K, V) :-
+    heap_entry(H, I, K, V),
+    heap_size(H, S),
+    S > 1,
+    compare(=, S, I),
+    !,
+    retract(heap_entry(H, I, K, V)),
     retract(heap(H, S)),
     S1 is S - 1,
     assert(heap(H, S1)).
 
+heap_extract(H, K, V) :-
+    heap_entry(H, I, K, V),
+    heap_size(H, S),
+    S > 1,
+    S > I,
+    !,
+    retract(heap_entry(H, S, SK, SV)),
+    retract(heap_entry(H, I, K, V)),
+    assert(heap_entry(H, I, SK, SV)),
+    retract(heap(H, S)),
+    S1 is S - 1,
+    assert(heap(H, S1)),
+    heapify(H, I).
+
+heapify(H, I) :- 
+    L is I * 2,
+    R is I * 2 + 1,
+    heap_size(H, S),
+    L > S,
+    R > S,
+    !. 
+
+heapify(H, I) :-
+    L is I * 2,
+    R is I * 2 + 1,
+    smallest(H, L, R, I, Smallest),
+    !,
+    swap(H, I, Smallest).
+
+smallest(H, L, R, I, Smallest) :-
+    heap_size(H, S),
+    L =< S,
+    R =< S,
+    heap_entry(H, I, _, VI),
+    heap_entry(H, L, _, VL),
+    heap_entry(H, R, _, VR),
+    VL < VI,
+    VR > VL,
+    !,
+    Smallest is L.
+
+smallest(H, L, R, I, Smallest) :-
+    heap_size(H, S),
+    L =< S,
+    R =< S,
+    heap_entry(H, I, _, VI),
+    heap_entry(H, L, _, VL),
+    heap_entry(H, R, _, VR),
+    VL < VI,
+    VR < VL,
+    !,
+    Smallest is R.
+
+smallest(H, L, R, I, Smallest) :-
+    heap_size(H, S),
+    L =< S,
+    R =< S,
+    heap_entry(H, I, _, VI),
+    heap_entry(H, L, _, VL),
+    heap_entry(H, R, _, VR),
+    VL > VI,
+    VR < VI,
+    !,
+    Smallest is R.
+
+smallest(H, L, R, I, Smallest) :-
+    heap_size(H, S),
+    L =< S,
+    R > S,
+    heap_entry(H, I, _, VI),
+    heap_entry(H, L, _, VL),
+    VL < VI,
+    !,
+    Smallest is L.
+
+smallest(H, L, R, I, Smallest) :-
+    heap_size(H, S),
+    L =< S,
+    R =< S,
+    heap_entry(H, I, _, VI),
+    heap_entry(H, L, _, VL),
+    heap_entry(H, R, _, VR),
+    VL > VI,
+    VR > VI,
+    !,
+    Smallest is I.
+
+smallest(H, L, R, I, Smallest) :-
+    heap_size(H, S),
+    L =< S,
+    R > S,
+    heap_entry(H, I, _, VI),
+    heap_entry(H, L, _, VL),
+    VL > VI,
+    !,
+    Smallest is I.
+
+smallest(H, L, R, I, Smallest) :-
+    heap_size(H, S),
+    L > S,
+    R > S,
+    !,
+    Smallest is I.
+
+swap(_, I, Smallest) :-
+    compare(=, Smallest, I),
+    !.
+
+swap(H, I, Smallest) :-
+    Smallest \= I,
+    !,
+    retract(heap_entry(H, Smallest, SmallestK, SmallestV)),
+    retract(heap_entry(H, I, K, V)),
+    assert(heap_entry(H, I, SmallestK, SmallestV)),
+    assert(heap_entry(H, Smallest, K, V)),
+    heapify(H, Smallest).
+
 % Il predicato è vero quando la chiave OldKey (associata al valore V) è sostituita da NewKey.
 % N.B.: Predicato da implementare solo se è necessario. Per adesso ne creo una bozza, eventualmente lo elimino.
+% TODO: Dopo aver modificato l'elemento potrebbe essere necessario sistemare lo heap
 modify_key(H, NewKey, OldKey, V) :-
     heap(H, _),
     heap_entry(H, S, OldKey, V),
     retract(heap_entry(H, S, OldKey, V)),
     assert(heap_entry(H, S, NewKey, V)).
 
+% Il predicato stampa sulla console Prolog lo stato interno dello heap
 list_heap(H) :-
     heap(H, _),
     listing(heap(H, _)),
