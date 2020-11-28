@@ -36,8 +36,8 @@ new_vertex(G, V) :-
     graph(G),
     assert(vertex(G, V)).
 
-% Questo predicato è vero quanto Vs è una lista contenente tutti i vertici di G.
-vertices(G, Vs) :-
+% Questo predicato è vero quando Vs è una lista contenente tutti i vertici di G.
+graph_vertices(G, Vs) :-
     findall(V, vertex(G, V), Vs).
 
 % Questo predicato stampa alla console dell’interprete Prolog una lista dei vertici del grafo G.
@@ -56,11 +56,11 @@ new_arc(G, U, V) :-
     new_arc(G, U, V, 1).
 
 % Questo predicato è vero quando Es è una lista di tutti gli archi presenti in G.
-arcs(G, Es) :-
+graph_arcs(G, Es) :-
     findall(arc(G, U, V, W), arc(G, U, V, W), Es).
 
 % Questo predicato è vero quando V è un vertice di G e Ns è una lista contenente gli archi che portano ai vertici N immediatamente raggiungibili da V.
-neighbors(G, V, Ns) :-
+vertex_neighbors(G, V, Ns) :-
     vertex(G, V),
     findall(arc(G, V, N, W), arc(G, V, N, W), Ns).
 
@@ -94,7 +94,7 @@ write_graph(G, FileName) :-
    write_graph(G, FileName, graph).
 
 write_graph(G, FileName, graph) :-
-    arcs(G, Es),
+    graph_arcs(G, Es),
     maplist(prepare_output, Es, Rows),
     csv_write_file(FileName, Rows, [separator(0'\t)]).
  
@@ -113,7 +113,6 @@ prepare_output(Arc, Row) :-
 
 % Fatti
 heap(heap, 10).
-heap(seu, 2).
 heap_entry(heap, 1, 1, 1).
 heap_entry(heap, 2, 2, 2).
 heap_entry(heap, 3, 4, 4).
@@ -124,8 +123,6 @@ heap_entry(heap, 7, 9, 9).
 heap_entry(heap, 8, 16, 16).
 heap_entry(heap, 9, 8, 8).
 heap_entry(heap, 10, 14, 14).
-heap_entry(seu, 1, 1, 1).
-heap_entry(seu, 2, 2, 2).
 
 % Questo predicato inserisce un nuovo heap nella base-dati Prolog.
 new_heap(H) :-
@@ -142,7 +139,7 @@ delete_heap(H) :-
     retractall(heap_entry(H, _, _, _)).
 
 % Questo predicato è vero quando S è la dimensione corrente dello heap.
-heap_size(H, S) :-
+heap_has_size(H, S) :-
     heap(H, S).
 
 % Questo predicato è vero quando lo heap H non contiene elementi.
@@ -343,3 +340,5 @@ list_heap(H) :-
     heap(H, _),
     listing(heap(H, _)),
     listing(heap_entry(H, _, _, _)).
+
+% Minimum Spanning Trees
