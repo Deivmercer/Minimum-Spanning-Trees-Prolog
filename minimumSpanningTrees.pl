@@ -171,16 +171,16 @@ heapify_insert(_, I) :-
 
 heapify_insert(_, I) :-
     P is floor(I / 2),
-    heap_entry(H, I, _, V),
-    heap_entry(H, P, _, PV),
-    V > PV,
+    heap_entry(H, I, K, _),
+    heap_entry(H, P, PK, _),
+    K > PK,
     !.
 
 heapify_insert(H, I) :-
     P is floor(I / 2),
     heap_entry(H, I, K, V),
     heap_entry(H, P, PK, PV),
-    V < PV,
+    K < PK,
     retract(heap_entry(H, I, K, V)),
     retract(heap_entry(H, P, PK, PV)),
     assert(heap_entry(H, P, K, V)),
@@ -191,7 +191,7 @@ heapify_insert(H, I) :-
 % TODO: In certe situazioni sembra dare più di una scelta, che non dovrebbe esserci e che comunque fallisce sempre
 heap_extract(H, K, V) :-
     heap_entry(H, _, K, V),
-    heap_size(H, S),
+    heap_has_size(H, S),
     compare(=, S, 1),
     !,
     retract(heap_entry(H, _, K, V)),
@@ -200,7 +200,7 @@ heap_extract(H, K, V) :-
 
 heap_extract(H, K, V) :-
     heap_entry(H, I, K, V),
-    heap_size(H, S),
+    heap_has_size(H, S),
     S > 1,
     compare(=, S, I),
     !,
@@ -211,7 +211,7 @@ heap_extract(H, K, V) :-
 
 heap_extract(H, K, V) :-
     heap_entry(H, I, K, V),
-    heap_size(H, S),
+    heap_has_size(H, S),
     S > 1,
     S > I,
     !,
@@ -226,7 +226,7 @@ heap_extract(H, K, V) :-
 heapify(H, I) :- 
     L is I * 2,
     R is I * 2 + 1,
-    heap_size(H, S),
+    heap_has_size(H, S),
     L > S,
     R > S,
     !. 
@@ -234,84 +234,34 @@ heapify(H, I) :-
 heapify(H, I) :-
     L is I * 2,
     R is I * 2 + 1,
-    smallest(H, L, R, I, Smallest),
+    smallest(H, I, L, Stemp),
+    smallest(H, Stemp, R, Smallest),
     !,
     swap(H, I, Smallest).
 
-smallest(H, L, R, I, Smallest) :-
-    heap_size(H, S),
-    L =< S,
-    R =< S,
-    heap_entry(H, I, _, VI),
-    heap_entry(H, L, _, VL),
-    heap_entry(H, R, _, VR),
-    VL < VI,
-    VR > VL,
+smallest(H, X, Y, Smallest) :-
+    heap_has_size(H, S),
+    Y =< S,
+    heap_entry(H, X, XK, _),
+    heap_entry(H, Y, YK, _),
+    YK < XK,
     !,
-    Smallest is L.
+    Smallest is Y.
 
-smallest(H, L, R, I, Smallest) :-
-    heap_size(H, S),
-    L =< S,
-    R =< S,
-    heap_entry(H, I, _, VI),
-    heap_entry(H, L, _, VL),
-    heap_entry(H, R, _, VR),
-    VL < VI,
-    VR < VL,
+smallest(H, X, Y, Smallest) :-
+    heap_has_size(H, S),
+    Y =< S,
+    heap_entry(H, X, XK, _),
+    heap_entry(H, Y, YK, _),
+    YK > XK,
     !,
-    Smallest is R.
+    Smallest is X.
 
-smallest(H, L, R, I, Smallest) :-
-    heap_size(H, S),
-    L =< S,
-    R =< S,
-    heap_entry(H, I, _, VI),
-    heap_entry(H, L, _, VL),
-    heap_entry(H, R, _, VR),
-    VL > VI,
-    VR < VI,
+smallest(H, X, Y, Smallest) :-
+    heap_has_size(H, S),
+    Y > S,
     !,
-    Smallest is R.
-
-smallest(H, L, R, I, Smallest) :-
-    heap_size(H, S),
-    L =< S,
-    R > S,
-    heap_entry(H, I, _, VI),
-    heap_entry(H, L, _, VL),
-    VL < VI,
-    !,
-    Smallest is L.
-
-smallest(H, L, R, I, Smallest) :-
-    heap_size(H, S),
-    L =< S,
-    R =< S,
-    heap_entry(H, I, _, VI),
-    heap_entry(H, L, _, VL),
-    heap_entry(H, R, _, VR),
-    VL > VI,
-    VR > VI,
-    !,
-    Smallest is I.
-
-smallest(H, L, R, I, Smallest) :-
-    heap_size(H, S),
-    L =< S,
-    R > S,
-    heap_entry(H, I, _, VI),
-    heap_entry(H, L, _, VL),
-    VL > VI,
-    !,
-    Smallest is I.
-
-smallest(H, L, R, I, Smallest) :-
-    heap_size(H, S),
-    L > S,
-    R > S,
-    !,
-    Smallest is I.
+    Smallest is X.
 
 swap(_, I, Smallest) :-
     compare(=, Smallest, I),
