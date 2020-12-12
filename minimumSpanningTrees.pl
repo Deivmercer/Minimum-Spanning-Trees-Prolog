@@ -6,32 +6,6 @@
 :- dynamic vertex/2.
 :- dynamic arc/4.
 
-%%% Fatti
-graph(grafo).
-vertex(grafo, a).
-vertex(grafo, b).
-vertex(grafo, c).
-vertex(grafo, d).
-vertex(grafo, e).
-vertex(grafo, f).
-vertex(grafo, g).
-vertex(grafo, h).
-vertex(grafo, i).
-arc(grafo, a, b, 4).
-arc(grafo, a, h, 8).
-arc(grafo, b, c, 8).
-arc(grafo, b, h, 11).
-arc(grafo, c, d, 7).
-arc(grafo, c, f, 4).
-arc(grafo, c, i, 2).
-arc(grafo, d, e, 9).
-arc(grafo, d, f, 14).
-arc(grafo, e, f, 10).
-arc(grafo, f, g, 2).
-arc(grafo, g, h, 1).
-arc(grafo, g, i, 6).
-arc(grafo, h, i, 7).
-
 % Questo predicato inserisce un nuovo grafo nella base-dati Prolog.
 new_graph(G) :- 
     graph(G), 
@@ -49,8 +23,13 @@ delete_graph(G) :-
 
 % Aggiunge il vertice V nella base-dati Prolog.
 new_vertex(G, V) :-
+    vertex(G, V),
+    !.
+
+new_vertex(G, V) :-
     graph(G),
-    assert(vertex(G, V)).
+    assert(vertex(G, V)),
+    !.
 
 % Questo predicato è vero quando Vs è una lista contenente tutti i vertici di G.
 graph_vertices(G, Vs) :-
@@ -106,27 +85,32 @@ list_graph(G) :-
     list_arcs(G).
 
 % Questo predicato legge un “grafo” G, da un file FileName e lo inserisce nel data base di Prolog.
-%% TODO: Nella lettura sarebbe meglio asserire anche i vertici
 read_graph(G, FileName) :-
     csv_read_file(FileName, Rows, [functor(arc), arity(3), separator(0'\t)]),
+    new_graph(G),
     maplist(assert_results(G), Rows).
 
 assert_results(G, Rows) :-
-    Rows =.. [R | Rs],
-    Arc =.. [R, G | Rs],
+    Rows =.. [P, U, V, W],
+    new_vertex(G, U),
+    new_vertex(G, V),
+    Arc =.. [P, G, U, V, W],
     assert(Arc).
 
 % Questo predicato è vero quando G viene scritto sul file FileName secondo il valore dell’argomento Type. Type può essere graph o edges.
-%% TODO: Introdurre determinismo tra i /3
 write_graph(G, FileName) :-
    write_graph(G, FileName, graph).
 
 write_graph(G, FileName, graph) :-
+    atom(G),
+    !,
     graph_arcs(G, Es),
     maplist(prepare_output, Es, Rows),
     csv_write_file(FileName, Rows, [separator(0'\t)]).
  
 write_graph(G, FileName, edges) :-
+    compound(G),
+    !,
     maplist(prepare_output, G, Rows),
     csv_write_file(FileName, Rows, [separator(0'\t)]).
 
