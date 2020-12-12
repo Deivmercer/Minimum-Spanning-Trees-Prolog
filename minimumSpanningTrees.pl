@@ -8,13 +8,29 @@
 
 %%% Fatti
 graph(grafo).
-vertex(grafo, 1).
-vertex(grafo, 2).
-vertex(grafo, 3).
-vertex(grafo, 4).
-arc(grafo, 1, 2, 1).
-arc(grafo, 2, 3, 1).
-arc(grafo, 1, 4, 1).
+vertex(grafo, a).
+vertex(grafo, b).
+vertex(grafo, c).
+vertex(grafo, d).
+vertex(grafo, e).
+vertex(grafo, f).
+vertex(grafo, g).
+vertex(grafo, h).
+vertex(grafo, i).
+arc(grafo, a, b, 4).
+arc(grafo, a, h, 8).
+arc(grafo, b, c, 8).
+arc(grafo, b, h, 11).
+arc(grafo, c, d, 7).
+arc(grafo, c, f, 4).
+arc(grafo, c, i, 2).
+arc(grafo, d, e, 9).
+arc(grafo, d, f, 14).
+arc(grafo, e, f, 10).
+arc(grafo, f, g, 2).
+arc(grafo, g, h, 1).
+arc(grafo, g, i, 6).
+arc(grafo, h, i, 7).
 
 % Questo predicato inserisce un nuovo grafo nella base-dati Prolog.
 new_graph(G) :- 
@@ -38,6 +54,7 @@ new_vertex(G, V) :-
 
 % Questo predicato è vero quando Vs è una lista contenente tutti i vertici di G.
 graph_vertices(G, Vs) :-
+    graph(G),
     findall(V, vertex(G, V), Vs).
 
 % Questo predicato stampa alla console dell’interprete Prolog una lista dei vertici del grafo G.
@@ -46,6 +63,7 @@ list_vertices(G) :-
     listing(vertex(G, _)).
 
 % Aggiunge un arco del grafo G alla base dati Prolog.
+%% TODO: Cosa fare se l'arco è già presente?
 new_arc(G, U, V, Weight) :-
     graph(G),
     vertex(G, U),
@@ -57,6 +75,7 @@ new_arc(G, U, V) :-
 
 % Questo predicato è vero quando Es è una lista di tutti gli archi presenti in G.
 graph_arcs(G, Es) :-
+    graph(G),
     findall(arc(G, U, V, W), arc(G, U, V, W), Es).
 
 % Questo predicato è vero quando V è un vertice di G e Ns è una lista contenente gli archi che portano ai vertici N immediatamente raggiungibili da V.
@@ -67,7 +86,14 @@ vertex_neighbors(G, V, Ns) :-
 % Questo predicato è vero quando V è un vertice di G e Vs è una lista contenente i vertici ad esso adiacenti.
 adjs(G, V, Vs) :- 
     vertex(G, V),
-    findall(vertex(G, U), arc(G, V, U, _), Vs).
+    findall(vertex(G, U), arc(G, V, U, _), VOs),
+    findall(vertex(G, U), arc(G, U, V, _), VIs),
+    merge(VOs, VIs, Vs).
+
+merge([], Ys, Ys).
+
+merge([X | Xs], Ys, [X | Zs]) :-
+    merge(Xs, Ys, Zs).
 
 % Questo predicato stampa alla console dell’interprete Prolog una lista degli archi del grafo G.
 list_arcs(G) :-
@@ -80,6 +106,7 @@ list_graph(G) :-
     list_arcs(G).
 
 % Questo predicato legge un “grafo” G, da un file FileName e lo inserisce nel data base di Prolog.
+%% TODO: Nella lettura sarebbe meglio asserire anche i vertici
 read_graph(G, FileName) :-
     csv_read_file(FileName, Rows, [functor(arc), arity(3), separator(0'\t)]),
     maplist(assert_results(G), Rows).
@@ -90,6 +117,7 @@ assert_results(G, Rows) :-
     assert(Arc).
 
 % Questo predicato è vero quando G viene scritto sul file FileName secondo il valore dell’argomento Type. Type può essere graph o edges.
+%% TODO: Introdurre determinismo tra i /3
 write_graph(G, FileName) :-
    write_graph(G, FileName, graph).
 
@@ -110,19 +138,6 @@ prepare_output(Arc, Row) :-
 % Predicati definiti dinamicamente
 :- dynamic heap/2.
 :- dynamic heap_entry/4.
-
-% Fatti
-heap(heap, 10).
-heap_entry(heap, 1, 1, 1).
-heap_entry(heap, 2, 2, 2).
-heap_entry(heap, 3, 4, 4).
-heap_entry(heap, 4, 7, 7).
-heap_entry(heap, 5, 3, 3).
-heap_entry(heap, 6, 10, 10).
-heap_entry(heap, 7, 9, 9).
-heap_entry(heap, 8, 16, 16).
-heap_entry(heap, 9, 8, 8).
-heap_entry(heap, 10, 14, 14).
 
 % Questo predicato inserisce un nuovo heap nella base-dati Prolog.
 new_heap(H) :-
@@ -173,7 +188,7 @@ heapify_insert(_, I) :-
     P is floor(I / 2),
     heap_entry(H, I, K, _),
     heap_entry(H, P, PK, _),
-    K > PK,
+    K >= PK,
     !.
 
 heapify_insert(H, I) :-
@@ -181,6 +196,7 @@ heapify_insert(H, I) :-
     heap_entry(H, I, K, V),
     heap_entry(H, P, PK, PV),
     K < PK,
+    !,
     retract(heap_entry(H, I, K, V)),
     retract(heap_entry(H, P, PK, PV)),
     assert(heap_entry(H, P, K, V)),
@@ -188,7 +204,8 @@ heapify_insert(H, I) :-
     heapify_insert(H, P).
 
 % Il predicato è vero quando la coppia K, V con K minima, è rimossa dallo heap H.
-% TODO: In certe situazioni sembra dare più di una scelta, che non dovrebbe esserci e che comunque fallisce sempre
+% TODO: In certe situazioni sembra dare più di una scelta, che non dovrebbe esserci e che comunque fallisce sempre (teoricamente è già stato fixato)
+% TODO: L'extract dovrebbe permettere di togliere solo l'head
 heap_extract(H, K, V) :-
     heap_entry(H, _, K, V),
     heap_has_size(H, S),
@@ -244,7 +261,7 @@ smallest(H, X, Y, Smallest) :-
     Y =< S,
     heap_entry(H, X, XK, _),
     heap_entry(H, Y, YK, _),
-    YK < XK,
+    YK =< XK,
     !,
     Smallest is Y.
 
@@ -263,18 +280,18 @@ smallest(H, X, Y, Smallest) :-
     !,
     Smallest is X.
 
-swap(_, I, Smallest) :-
-    compare(=, Smallest, I),
+swap(_, X, Y) :-
+    compare(=, X, Y),
     !.
 
-swap(H, I, Smallest) :-
-    Smallest \= I,
+swap(H, X, Y) :-
+    X \= Y,
     !,
-    retract(heap_entry(H, Smallest, SmallestK, SmallestV)),
-    retract(heap_entry(H, I, K, V)),
-    assert(heap_entry(H, I, SmallestK, SmallestV)),
-    assert(heap_entry(H, Smallest, K, V)),
-    heapify(H, Smallest).
+    retract(heap_entry(H, Y, YK, YV)),
+    retract(heap_entry(H, X, XK, XV)),
+    assert(heap_entry(H, X, YK, YV)),
+    assert(heap_entry(H, Y, XK, XV)),
+    heapify(H, Y).
 
 % Il predicato è vero quando la chiave OldKey (associata al valore V) è sostituita da NewKey.
 % N.B.: Predicato da implementare solo se è necessario. Per adesso ne creo una bozza, eventualmente lo elimino.
@@ -291,4 +308,105 @@ list_heap(H) :-
     listing(heap(H, _)),
     listing(heap_entry(H, _, _, _)).
 
-% Minimum Spanning Trees
+%%% Minimum Spanning Trees
+% Predicati definiti dinamicamente
+:- dynamic vertex_key/3.
+:- dynamic vertex_previous/3.
+
+% mst_prim/2
+mst_prim(G, Source) :-
+    vertex(G, Source),
+    new_heap(G),
+    heap_insert(G, 0, arc(G, Source, nil, inf)),
+    build_mst(G, Source).
+
+build_mst(G, H) :-
+    adjs(G, H, As),
+    mst_queue_from_list(G, H, As),
+    mst_add_vertex(G).
+
+mst_queue_from_list(_, _, []) :-
+    !.
+
+mst_queue_from_list(G, H, [A | As]) :-
+    A =.. [_, _, V],
+    vertex_key(G, V, W1),
+    arc(G, H, V, W2),
+    W1 =< W2,
+    !,
+    mst_queue_from_list(G, H, As).
+
+mst_queue_from_list(G, H, [A | As]) :-
+    A =.. [_, _, V],
+    vertex_key(G, V, W1),
+    arc(G, V, H, W2),
+    W1 =< W2,
+    !,
+    mst_queue_from_list(G, H, As).
+
+%% TODO: Credo ci sia il rischio che un elemento possa essere aggiunto all'heap più volte
+%%       EG: X non è nell'albero ma è già presente nell'heap con un altro arco o addiritutta con lo stesso arco
+%%           Non dovrebbe causare grossi problemi, se non nei tempi di esecuzione
+mst_queue_from_list(G, H, [A | As]) :-
+    A =.. [_, _, V],
+    vertex_key(G, V, W1),
+    arc(G, H, V, W2),
+    W2 < W1,
+    !,
+    heap_insert(G, W2, arc(G, H, V, W2)),
+    mst_queue_from_list(G, H, As).
+
+mst_queue_from_list(G, H, [A | As]) :-
+    A =.. [_, _, V],
+    vertex_key(G, V, W1),
+    arc(G, V, H, W2),
+    W2 < W1,
+    !,
+    heap_insert(G, W2, arc(G, V, H, W2)),
+    mst_queue_from_list(G, H, As).
+
+mst_queue_from_list(G, H, [A | As]) :-
+    A =.. [_, _, V],
+    not(vertex_key(G, V, _)),
+    arc(G, H, V, W),
+    !,
+    heap_insert(G, W, arc(G, V, H, W)),
+    mst_queue_from_list(G, H, As).
+
+mst_queue_from_list(G, H, [A | As]) :-
+    A =.. [_, _, V],
+    not(vertex_key(G, V, _)),
+    arc(G, V, H, W),
+    !,
+    heap_insert(G, W, arc(G, V, H, W)),
+    mst_queue_from_list(G, H, As).
+
+mst_add_vertex(G) :-
+    heap_empty(G),
+    !.
+
+mst_add_vertex(G) :-
+    heap_not_empty(G),
+    heap_head(G, K, V),
+    V =.. [_, _, A, _, _],
+    vertex_key(G, A, _),
+    !,
+    heap_extract(G, K, V),
+    mst_add_vertex(G).
+
+mst_add_vertex(G) :-
+    heap_not_empty(G),
+    heap_head(G, K, V),
+    V =.. [_, _, A, H, _],
+    not(vertex_key(G, A, _)),
+    !,
+    heap_extract(G, K, V),
+    assert(vertex_key(G, A, K)),
+    assert(vertex_previous(G, A, H)),
+    build_mst(G, A). 
+
+a :-
+    listing(vertex_key(_, _, _)),
+    listing(vertex_previous(_, _, _)).
+
+% mst_get
