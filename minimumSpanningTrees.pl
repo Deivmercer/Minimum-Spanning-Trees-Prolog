@@ -188,41 +188,27 @@ heapify_insert(H, I) :-
     heapify_insert(H, P).
 
 % Il predicato è vero quando la coppia K, V con K minima, è rimossa dallo heap H.
-% TODO: In certe situazioni sembra dare più di una scelta, che non dovrebbe esserci e che comunque fallisce sempre (teoricamente è già stato fixato)
-% TODO: L'extract dovrebbe permettere di togliere solo l'head
 heap_extract(H, K, V) :-
-    heap_entry(H, _, K, V),
+    heap_head(H, K, V),
     heap_has_size(H, S),
     compare(=, S, 1),
     !,
-    retract(heap_entry(H, _, K, V)),
+    retract(heap_entry(H, 1, K, V)),
     retract(heap(H, S)),
     assert(heap(H, 0)).
 
 heap_extract(H, K, V) :-
-    heap_entry(H, I, K, V),
+    heap_head(H, K, V),
     heap_has_size(H, S),
     S > 1,
-    compare(=, S, I),
     !,
-    retract(heap_entry(H, I, K, V)),
-    retract(heap(H, S)),
-    S1 is S - 1,
-    assert(heap(H, S1)).
-
-heap_extract(H, K, V) :-
-    heap_entry(H, I, K, V),
-    heap_has_size(H, S),
-    S > 1,
-    S > I,
-    !,
+    retract(heap_entry(H, 1, K, V)),
     retract(heap_entry(H, S, SK, SV)),
-    retract(heap_entry(H, I, K, V)),
-    assert(heap_entry(H, I, SK, SV)),
+    assert(heap_entry(H, 1, SK, SV)),
     retract(heap(H, S)),
     S1 is S - 1,
     assert(heap(H, S1)),
-    heapify(H, I).
+    heapify(H, 1).
 
 heapify(H, I) :- 
     L is I * 2,
