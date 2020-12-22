@@ -42,8 +42,21 @@ list_vertices(G) :-
     listing(vertex(G, _)).
 
 % Aggiunge un arco del grafo G alla base dati Prolog.
-%% TODO: Cosa fare se l'arco è già presente?
 new_arc(G, U, V, Weight) :-
+    arc(G, U, V, _),
+    !,
+    retract(arc(G, U, V, _)),
+    assert(arc(G, U, V, Weight)).
+
+new_arc(G, U, V, Weight) :-
+    arc(G, V, U, _),
+    !,
+    retract(arc(G, V, U, _)),
+    assert(arc(G, U, V, Weight)).
+
+new_arc(G, U, V, Weight) :-
+    not(arc(G, U, V, _)),
+    not(arc(G, V, U, _)),
     graph(G),
     vertex(G, U),
     vertex(G, V),
@@ -155,7 +168,7 @@ heap_head(H, K, V) :-
     heap_not_empty(H),
     heap_entry(H, 1, K, V).
 
-% Il predicato è vero quando l’elemento Vèinserito nelloheap Hcon chiave K.
+% Il predicato è vero quando l’elemento V è inserito nello heap H con chiave K.
 heap_insert(H, K, V) :-
     heap(H, S),
     retract(heap(H, S)),
@@ -264,13 +277,14 @@ swap(H, X, Y) :-
     heapify(H, Y).
 
 % Il predicato è vero quando la chiave OldKey (associata al valore V) è sostituita da NewKey.
-% N.B.: Predicato da implementare solo se è necessario. Per adesso ne creo una bozza, eventualmente lo elimino.
-% TODO: Dopo aver modificato l'elemento potrebbe essere necessario sistemare lo heap
 modify_key(H, NewKey, OldKey, V) :-
-    heap(H, _),
-    heap_entry(H, S, OldKey, V),
-    retract(heap_entry(H, S, OldKey, V)),
-    assert(heap_entry(H, S, NewKey, V)).
+    heap_entry(H, SV, OldKey, V),
+    heap_has_size(H, S),
+    S > 1,
+    !,
+    retract(heap_entry(H, SV, OldKey, V)),
+    assert(heap_entry(H, SV, NewKey, V)),
+    heapify_insert(H, SV).
 
 % Il predicato stampa sulla console Prolog lo stato interno dello heap
 list_heap(H) :-
@@ -283,100 +297,92 @@ list_heap(H) :-
 :- dynamic vertex_key/3.
 :- dynamic vertex_previous/3.
 
-% mst_prim/2
+% Dopo la prova di questo predicato, la base-dati Prolog ha al suo interno i predicati vertex_key(G, V, K) per ogni V appartenente a G; 
+% la base-dati Prolog contiene anche i predicati vertex_previous(G, V, U) per ogni V, ottenuti durante le iterazioni dell’algoritmo di Prim.
 mst_prim(G, Source) :-
     vertex(G, Source),
+    graph_vertices(G, Vs),
     new_heap(G),
-    heap_insert(G, 0, arc(G, Source, nil, inf)),
-    build_mst(G, Source).
+    mst_prepare_queue(G, Vs),
+    modify_key(G, 0, inf, Source),
+    mst_build_tree(G).
 
-build_mst(G, H) :-
-    adjs(G, H, As),
-    mst_queue_from_list(G, H, As),
-    mst_add_vertex(G).
-
-mst_queue_from_list(_, _, []) :-
+mst_prepare_queue(_, []) :-
     !.
 
-mst_queue_from_list(G, H, [A | As]) :-
-    A =.. [_, _, V],
-    vertex_key(G, V, W1),
-    arc(G, H, V, W2),
-    W1 =< W2,
-    !,
-    mst_queue_from_list(G, H, As).
+mst_prepare_queue(G, [V | Vs]) :-
+    heap_insert(G, inf, V),
+    assert(vertex_key(G, V, inf)),
+    assert(vertex_previous(G, V, nil)),
+    mst_prepare_queue(G, Vs).
 
-mst_queue_from_list(G, H, [A | As]) :-
-    A =.. [_, _, V],
-    vertex_key(G, V, W1),
-    arc(G, V, H, W2),
-    W1 =< W2,
-    !,
-    mst_queue_from_list(G, H, As).
-
-%% TODO: Credo ci sia il rischio che un elemento possa essere aggiunto all'heap più volte
-%%       EG: X non è nell'albero ma è già presente nell'heap con un altro arco o addiritutta con lo stesso arco
-%%           Non dovrebbe causare grossi problemi, se non nei tempi di esecuzione
-mst_queue_from_list(G, H, [A | As]) :-
-    A =.. [_, _, V],
-    vertex_key(G, V, W1),
-    arc(G, H, V, W2),
-    W2 < W1,
-    !,
-    heap_insert(G, W2, arc(G, H, V, W2)),
-    mst_queue_from_list(G, H, As).
-
-mst_queue_from_list(G, H, [A | As]) :-
-    A =.. [_, _, V],
-    vertex_key(G, V, W1),
-    arc(G, V, H, W2),
-    W2 < W1,
-    !,
-    heap_insert(G, W2, arc(G, V, H, W2)),
-    mst_queue_from_list(G, H, As).
-
-mst_queue_from_list(G, H, [A | As]) :-
-    A =.. [_, _, V],
-    not(vertex_key(G, V, _)),
-    arc(G, H, V, W),
-    !,
-    heap_insert(G, W, arc(G, V, H, W)),
-    mst_queue_from_list(G, H, As).
-
-mst_queue_from_list(G, H, [A | As]) :-
-    A =.. [_, _, V],
-    not(vertex_key(G, V, _)),
-    arc(G, V, H, W),
-    !,
-    heap_insert(G, W, arc(G, V, H, W)),
-    mst_queue_from_list(G, H, As).
-
-mst_add_vertex(G) :-
+mst_build_tree(G) :-
     heap_empty(G),
     !.
 
-mst_add_vertex(G) :-
+mst_build_tree(G) :-
     heap_not_empty(G),
-    heap_head(G, K, V),
-    V =.. [_, _, A, _, _],
-    vertex_key(G, A, _),
     !,
-    heap_extract(G, K, V),
-    mst_add_vertex(G).
+    heap_extract(G, _, V),
+    adjs(G, V, As),
+    mst_adjs(G, V, As),
+    mst_build_tree(G).
 
-mst_add_vertex(G) :-
-    heap_not_empty(G),
-    heap_head(G, K, V),
-    V =.. [_, _, A, H, _],
-    not(vertex_key(G, A, _)),
+mst_adjs(_, _, []) :-
+    !.
+
+mst_adjs(G, V, [A | As]) :-
+    A =.. [vertex, G, AV],
+    not(heap_entry(G, _, _, AV)),
     !,
-    heap_extract(G, K, V),
-    assert(vertex_key(G, A, K)),
-    assert(vertex_previous(G, A, H)),
-    build_mst(G, A). 
+    mst_adjs(G, V, As).
 
-a :-
-    listing(vertex_key(_, _, _)),
-    listing(vertex_previous(_, _, _)).
+mst_adjs(G, V, [A | As]) :-
+    A =.. [vertex, G, AV],
+    heap_entry(G, _, _, AV),
+    arc(G, V, AV, WNew),
+    vertex_key(G, AV, WOld),
+    WNew >= WOld,
+    !,
+    mst_adjs(G, V, As).
 
-% mst_get
+mst_adjs(G, V, [A | As]) :-
+    A =.. [vertex, G, AV],
+    heap_entry(G, _, _, AV),
+    arc(G, AV, V, WNew),
+    vertex_key(G, AV, WOld),
+    WNew >= WOld,
+    !,
+    mst_adjs(G, V, As).
+
+mst_adjs(G, V, [A | As]) :-
+    A =.. [vertex, G, AV],
+    heap_entry(G, _, AK, AV),
+    arc(G, V, AV, WNew),
+    vertex_key(G, AV, WOld),
+    WNew < WOld,
+    !,
+    retract(vertex_key(G, AV, WOld)),
+    retract(vertex_previous(G, AV, _)),
+    assert(vertex_key(G, AV, WNew)),
+    assert(vertex_previous(G, AV, V)),
+    modify_key(G, WNew, AK, AV),
+    mst_adjs(G, V, As).
+
+mst_adjs(G, V, [A | As]) :-
+    A =.. [vertex, G, AV],
+    heap_entry(G, _, AK, AV),
+    arc(G, AV, V, WNew),
+    vertex_key(G, AV, WOld),
+    WNew < WOld,
+    !,
+    retract(vertex_key(G, AV, WOld)),
+    retract(vertex_previous(G, AV, _)),
+    assert(vertex_key(G, AV, WNew)),
+    assert(vertex_previous(G, AV, V)),
+    modify_key(G, WNew, AK, AV),
+    mst_adjs(G, V, As).
+
+% Questo predicato è vero quando PreorderTree è una lista degli archi del MST ordinata secondo un attraversamento preorderdello stesso, 
+% fatta rispetto al peso dell’arco.
+% mst_get(G, Source, PreorderTree)
