@@ -34,7 +34,7 @@ new_vertex(G, V) :-
 % Questo predicato è vero quando Vs è una lista contenente tutti i vertici di G.
 graph_vertices(G, Vs) :-
     graph(G),
-    findall(V, vertex(G, V), Vs).
+    findall(vertex(G, V), vertex(G, V), Vs).
 
 % Questo predicato stampa alla console dell’interprete Prolog una lista dei vertici del grafo G.
 list_vertices(G) :-
@@ -278,13 +278,38 @@ swap(H, X, Y) :-
 
 % Il predicato è vero quando la chiave OldKey (associata al valore V) è sostituita da NewKey.
 modify_key(H, NewKey, OldKey, V) :-
+    heap_entry(H, _, OldKey, V),
+    compare(=, NewKey, OldKey),
+    !.
+
+modify_key(H, NewKey, OldKey, V) :-
     heap_entry(H, SV, OldKey, V),
+    NewKey \= OldKey,
+    heap_has_size(H, S),
+    compare(=, S, 1),
+    !,
+    retract(heap_entry(H, SV, OldKey, V)),
+    assert(heap_entry(H, SV, NewKey, V)).
+
+modify_key(H, NewKey, OldKey, V) :-
+    heap_entry(H, SV, OldKey, V),
+    NewKey < OldKey,
     heap_has_size(H, S),
     S > 1,
     !,
     retract(heap_entry(H, SV, OldKey, V)),
     assert(heap_entry(H, SV, NewKey, V)),
     heapify_insert(H, SV).
+
+modify_key(H, NewKey, OldKey, V) :-
+    heap_entry(H, SV, OldKey, V),
+    NewKey > OldKey,
+    heap_has_size(H, S),
+    S > 1,
+    !,
+    retract(heap_entry(H, SV, OldKey, V)),
+    assert(heap_entry(H, SV, NewKey, V)),
+    heapify(H, SV).
 
 % Il predicato stampa sulla console Prolog lo stato interno dello heap
 list_heap(H) :-
@@ -311,9 +336,10 @@ mst_prepare_queue(_, []) :-
     !.
 
 mst_prepare_queue(G, [V | Vs]) :-
-    heap_insert(G, inf, V),
-    assert(vertex_key(G, V, inf)),
-    assert(vertex_previous(G, V, nil)),
+    V =.. [_, G, N],
+    heap_insert(G, inf, N),
+    assert(vertex_key(G, N, inf)),
+    assert(vertex_previous(G, N, nil)),
     mst_prepare_queue(G, Vs).
 
 mst_build_tree(G) :-
