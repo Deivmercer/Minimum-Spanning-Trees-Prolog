@@ -12,7 +12,6 @@
           graph_arcs/2,
           vertex_neighbors/3,
           adjs/3,
-          merge/3,
           list_arcs/1,
           list_graph/1,
           read_graph/2,
@@ -139,6 +138,14 @@ list_vertices(G) :-
 %   Notare che gli archi sono bidirezionali.
 
 new_arc(G, U, V, Weight) :-
+    arc(G, U, V, Weight),
+    !.
+
+new_arc(G, U, V, Weight) :-
+    arc(G, V, U, Weight),
+    !.
+
+new_arc(G, U, V, Weight) :-
     arc(G, U, V, _),
     !,
     retract(arc(G, U, V, _)),
@@ -153,6 +160,7 @@ new_arc(G, U, V, Weight) :-
 new_arc(G, U, V, Weight) :-
     not(arc(G, U, V, _)),
     not(arc(G, V, U, _)),
+    !,
     graph(G),
     vertex(G, U),
     vertex(G, V),
@@ -208,20 +216,7 @@ adjs(G, V, Vs) :-
     vertex(G, V),
     findall(vertex(G, U), arc(G, V, U, _), VOs),
     findall(vertex(G, U), arc(G, U, V, _), VIs),
-    merge(VOs, VIs, Vs).
-
-%!  merge(+Xs:list, +Ys:list, -Zs:list) is det.
-%
-%   @arg Xs Lista iniziale
-%   @arg Ys Lista con cui effettuare il merge
-%   @arg Zs Lista contenente gli elementi di Xs ed Ys
-%
-%   True se Zs contiene gli elementi di Xs seguiti dagli elementi di Ys
-
-merge([], Ys, Ys).
-
-merge([X | Xs], Ys, [X | Zs]) :-
-    merge(Xs, Ys, Zs).
+    append(VOs, VIs, Vs).
 
 %!  list_arcs(+G:string) is det.
 %
@@ -242,8 +237,6 @@ list_arcs(G) :-
 list_graph(G) :-
     list_vertices(G),
     list_arcs(G).
-
-% Questo predicato legge un “grafo” G, da un file FileName e lo inserisce nel data base di Prolog.
 
 %!  read_graph(+G:string, +FileName:string) is det.
 %
@@ -269,11 +262,10 @@ read_graph(G, FileName) :-
 %   dal file.
 
 assert_results(G, Rows) :-
-    Rows =.. [P, U, V, W],
+    Rows =.. [_, U, V, W],
     new_vertex(G, U),
     new_vertex(G, V),
-    Arc =.. [P, G, U, V, W],
-    assert(Arc).
+    new_arc(G, U, V, W).
 
 %!  write_graph(+G:string, +FileName:string) is det.
 %
@@ -295,9 +287,10 @@ write_graph(G, FileName) :-
 %
 %   True se e' stato possibile scrivere su FileName gli archi relativi al grafo 
 %   G. 
-%   Se Type = graph allora G sara' una stringa che rappresenta il nome del grafo.
-%   Se Type = edges allora G sara' una lista che conterra' la lista degli archi di
-%   G.
+%   Se Type = graph allora G sara' una stringa che rappresenta il nome del 
+%   grafo.
+%   Se Type = edges allora G sara' una lista che conterra' la lista degli archi
+%   di G.
 %   FileName sara' un CSV che usera' \t come separatore e che conterra' vertice 
 %   sorgente, vertice destinazione e peso dell'arco.
 
