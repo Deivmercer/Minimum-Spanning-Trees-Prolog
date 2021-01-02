@@ -6,7 +6,12 @@
 	],
 	"settings": {
 		"terminal.integrated.shell.windows": "C:\\Program Files\\swipl\\bin\\swipl.exe",
-		"terminal.integrated.shellArgs.windows": ["minimumSpanningTrees.pl"]
+		"terminal.integrated.shellArgs.windows": [
+			"mst.pl"
+		],
+		"editor.rulers": [
+			80
+		]
 	},
 	"launch": {
 		"version": "0.2.0",
@@ -20,7 +25,7 @@
 				"env": {},
 				"program": "${file}",
 				"cwd": "${fileDirname}",
-				"startupQuery": "mst_prim(grafo, f)",
+				"startupQuery": "read_graph(grafo, 'grafi/grafo.csv').",
 				"stopOnEntry": true,
 				"traceCmds": {
 					"continue": [

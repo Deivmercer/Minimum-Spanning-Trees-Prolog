@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>minimum-spanning-trees-prolog</title>
+
+<link rel="stylesheet" type="text/css" href="pldoc.css">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+
+
+<h1 class="wiki">Minimum Spanning Trees Prolog</h1>
+
+<p>
+Progetto Linguaggi di Programmazione, A.A. 2020/2021
+Libreria Common LISP: <a href="https://github.com/Deivmercer/Minimum-Spanning-Trees-LISP">Minimum Spanning Trees LISP</a></p>
+
+<h2 class="wiki">Introduzione</h2>
+
+<p>
+Un problema che appare spesso sotto varie guise consiste nel connettere diversi "punti" in modo "equivalente", ad esempio collegandoli con dei fili ma senza creare dei cicli. Un altro problema tipico Ã¨ quello di calcolare il percorso piÃ¹ breve da un punto a un altro di una mappa.
+Vi sono diversi algoritmi in grado di risolvere questi problemi, noti in letteratura come il "Minimum Spanning Tree" (MST Problem, cfr., [CLR+09] capitolo 23) ed il "Single Source Shortest Path Problem" (SSSP Problem, cfr., [CLR+09] capitolo 24).
+Lo scopo di questo progetto Ã¨ di implementare l'algoritmo di Prim (cfr., [CLR+09] 23.2) per la soluzione del problema MST per grafi non-diretti e connessi con pesi non negativi.
+Per procedere all'implementazione di questi algoritmi Ã¨ necessario - e, di fatto, Ã¨ la parte principale del progetto - produrre un'implementazione di un MINHEAP (o MINPRIORITYQUEUE).</p>
+
+<h2 class="wiki">Riferimenti</h2>
+
+<p>
+[CLR+09] Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein, Introduction to Algorithms, Third Edition, The MIT Press, 2009 (Capitoli 6 e 23.2)
+[SW11] Robert Sedgewick, Kevin Wayne, Algorithms, Fourth Edition, Addison Wesley Professional, 2011 (Capitoli 2.4 <a href="http://algs4.cs.princeton.edu/24pq/">http://algs4.cs.princeton.edu/24pq/</a> e 4.4 <a href="http://algs4.cs.princeton.edu/44sp/">http://algs4.cs.princeton.edu/44sp/</a>)</p>
+
+<h2 class="wiki plfiles">Prolog files</h2>
+
+<table class="summary">
+<tr><th colspan="3" class="file"><span style="float:left"><a href="graph.html">graph.pl</a></span>&nbsp; -- Graph<span style="float:right"></span></th></tr>
+<tr class="public"><td><a href="graph.html#adjs/3">adjs/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#arc/4">arc/4</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#assert_results/2">assert_results/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#delete_graph/1">delete_graph/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#graph/1">graph/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#graph_arcs/2">graph_arcs/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#graph_vertices/2">graph_vertices/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#list_arcs/1">list_arcs/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#list_graph/1">list_graph/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#list_vertices/1">list_vertices/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#merge/3">merge/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#new_arc/3">new_arc/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#new_arc/4">new_arc/4</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#new_graph/1">new_graph/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#new_vertex/2">new_vertex/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#prepare_output/2">prepare_output/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#read_graph/2">read_graph/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#vertex/2">vertex/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#vertex_neighbors/3">vertex_neighbors/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#write_graph/2">write_graph/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="graph.html#write_graph/3">write_graph/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr><th colspan="3" class="file"><span style="float:left"><a href="heap.html">heap.pl</a></span>&nbsp; -- Heap<span style="float:right"></span></th></tr>
+<tr class="public"><td><a href="heap.html#delete_heap/1">delete_heap/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap/2">heap/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap_empty/1">heap_empty/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap_entry/4">heap_entry/4</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap_extract/3">heap_extract/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap_has_size/2">heap_has_size/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap_head/3">heap_head/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap_insert/3">heap_insert/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heap_not_empty/1">heap_not_empty/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heapify/2">heapify/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#heapify_insert/2">heapify_insert/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#list_heap/1">list_heap/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#modify_key/4">modify_key/4</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#new_heap/1">new_heap/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#smallest/4">smallest/4</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="heap.html#swap/3">swap/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr><th colspan="3" class="file"><span style="float:left"><a href="mst.html">mst.pl</a></span>&nbsp; -- Minimum Spanning Tree<span style="float:right"></span></th></tr>
+<tr class="public"><td><a href="mst.html#mst_adjs/3">mst_adjs/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#mst_build_tree/1">mst_build_tree/1</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#mst_childs_weight/3">mst_childs_weight/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#mst_get/3">mst_get/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#mst_preorder_tree/4">mst_preorder_tree/4</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#mst_prepare_queue/2">mst_prepare_queue/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#mst_prim/2">mst_prim/2</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#vertex_key/3">vertex_key/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+<tr class="public"><td><a href="mst.html#vertex_previous/3">vertex_previous/3</a></td><td class="summary"></td><td align="right"><span style="white-space: nowrap"></span></td></tr>
+</table>
+
+</body>
+</html>

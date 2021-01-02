@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>graph.pl -- Graph</title>
+
+<link rel="stylesheet" type="text/css" href="pldoc.css">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+
+
+<h1 class="file"><span style="float:right"></span>graph.pl -- Graph</h1>
+
+<p>
+Libreria per la gestione di grafi diretti, connessi e con cicli.</p>
+
+<dl class="tags">
+<dt class="keyword-author">author</dt><dd class="keyword-author">- Davide Costantini</dd>
+<dt class="keyword-version">version</dt><dd class="keyword-version">- 1.0</dd>
+</dl>
+
+<dl>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="graph/1"><b class="pred">graph</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo
+
+<p>
+Rappresentazione di un grafo.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="vertex/2"><b class="pred">vertex</b><var class="arglist">(+G:string, +V:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice
+
+<p>
+Rappresentazione di un vertice.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="arc/4"><b class="pred">arc</b><var class="arglist">(+G:string, +U:string, +V:string, +W:int)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice sorgente</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice destinazione</td></tr>
+<tr><td><var>K</var></td><td class="argdescr">- Peso dell'arco
+
+<p>
+Rappresentazione di un nodo dell'MST.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="new_graph/1"><b class="pred">new_graph</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo
+
+<p>
+True se <var>G</var> rappresenta un grafo. Se al momento della chiamata <var>G</var> non
+rappresenta un grafo allora verra' asserito un nuovo grafo.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="delete_graph/1"><b class="pred">delete_graph</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo
+
+<p>
+True se e' stato possibile ritrattare tutti i fatti relativi al grafo
+(compresi i vertici e gli archi).</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="new_vertex/2"><b class="pred">new_vertex</b><var class="arglist">(+G:string, +V:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice
+
+<p>
+True se <var>V</var> rappresenta un vertice del grafo <var>V</var>. Se <var>V</var> non rappresenta un
+vertice del grafo <var>V</var>, allora verra' asserito un nuovo vertice.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="graph_vertices/2"><b class="pred">graph_vertices</b><var class="arglist">(+G:string, -Vs:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>Vs</var></td><td class="argdescr">- Lista dei vertici del grafo
+
+<p>
+True se <var>Vs</var> contiene tutti i vertici relativi al grafo <var>G</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="list_vertices/1"><b class="pred">list_vertices</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo
+
+<p>
+Stampa tutti i vertici relativi al grafo <var>G</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="new_arc/4"><b class="pred">new_arc</b><var class="arglist">(+G:string, +U:string, +V:string, +W:int)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>U</var></td><td class="argdescr">- Nome del vertice sorgente</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice destinazione</td></tr>
+<tr><td><var>W</var></td><td class="argdescr">- Peso dell'arco
+
+<p>
+True se all'interno del grafo e' presente un grafo da <var>U</var> a <var>V</var> con peso <var>W</var>. Se
+al momento della chiamata questo arco non esiste allora viene asserito. Se
+e' gia' presente un arco da <var>U</var> a <var>V</var> con peso diverso da <var>W</var> allora l'arco viene
+modificato in modo che il peso sia <var>W</var>.
+Notare che gli archi sono bidirezionali.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="new_arc/3"><b class="pred">new_arc</b><var class="arglist">(+G:string, +U:string, +V:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>U</var></td><td class="argdescr">- Nome del vertice sorgente</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice destinazione
+
+<p>
+True e' true la chiamata a <a href="graph.html#new_arc/4">new_arc/4</a> con W = 1.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="graph_arcs/2"><b class="pred">graph_arcs</b><var class="arglist">(+G:string, -Es:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>Es</var></td><td class="argdescr">- Lista degli archi del grafo
+
+<p>
+True se <var>Es</var> contiene tutti gli archi del grafo.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="vertex_neighbors/3"><b class="pred">vertex_neighbors</b><var class="arglist">(+G:string, +V:string, -Ns:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice destinazione</td></tr>
+<tr><td><var>Ns</var></td><td class="argdescr">- Lista degli archi che congiungono <var>V</var> agli altri vertici
+
+<p>
+True se <var>Ns</var> e' la lista degli archi che portano ai vertici N immediatamente
+raggiungibili da <var>V</var> nel grafo <var>G</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="adjs/3"><b class="pred">adjs</b><var class="arglist">(+G:string, +V:string, -Vs:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice destinazione</td></tr>
+<tr><td><var>Vs</var></td><td class="argdescr">- Lista degi vertici adiacenti a <var>V</var>
+
+<p>
+True se <var>Vs</var> e' la lista dei vertici adiacenti a <var>V</var> nel grafo <var>G</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="merge/3"><b class="pred">merge</b><var class="arglist">(+Xs:list, +Ys:list, -Zs:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>Xs</var></td><td class="argdescr">- Lista iniziale</td></tr>
+<tr><td><var>Ys</var></td><td class="argdescr">- Lista con cui effettuare il merge</td></tr>
+<tr><td><var>Zs</var></td><td class="argdescr">- Lista contenente gli elementi di <var>Xs</var> ed <var>Ys</var>
+
+<p>
+True se <var>Zs</var> contiene gli elementi di <var>Xs</var> seguiti dagli elementi di <var>Ys</var></p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="list_arcs/1"><b class="pred">list_arcs</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo
+
+<p>
+Stampa tutti gli archi relativi al grafo <var>G</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="list_graph/1"><b class="pred">list_graph</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo
+
+<p>
+Stampa tutti i vertici e gli archi relativi al grafo <var>G</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="read_graph/2"><b class="pred">read_graph</b><var class="arglist">(+G:string, +FileName:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>FileName</var></td><td class="argdescr">- Nome del file per l'input
+
+<p>
+True se e' stato possibile leggere e memorizzare nella base di conoscenza di
+Prolog gli archi relativi al grafo <var>G</var> contenuti in <var>FileName</var>.
+<var>FileName</var> deve essere un CSV che usa \t come separatore e che contiene
+vertice sorgente, vertice destinazione e peso dell'arco.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="assert_results/2"><b class="pred">assert_results</b><var class="arglist">(+G:string, +Rows:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>Rows</var></td><td class="argdescr">- Riga letta dal file
+
+<p>
+Memorizza nella base di conoscenza di Prolog i vertici e gli archi letti
+dal file.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="write_graph/2"><b class="pred">write_graph</b><var class="arglist">(+G:string, +FileName:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo</td></tr>
+<tr><td><var>FileName</var></td><td class="argdescr">- Nome del file per l'output
+
+<p>
+True se e' stato possibile scrivere su <var>FileName</var> gli archi relativi al grafo
+<var>G</var>. La scrittura viene effettuata chiamando <a href="graph.html#write_graph/3">write_graph/3</a> con Type = graph.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="write_graph/3"><b class="pred">write_graph</b><var class="arglist">(+G:string, +FileName:string, +Type:string)</var></a> is <b class="det">det</b></dt>
+<dt class="pubdef"><b class="pred">write_graph</b><var class="arglist">(+G:list, +FileName:string, +Type:string)</var> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo o lista degli archi del grafo</td></tr>
+<tr><td><var>FileName</var></td><td class="argdescr">- Nome del file per l'output</td></tr>
+<tr><td><var>Type</var></td><td class="argdescr">- Modalita' di scrittura del grafo
+
+<p>
+True se e' stato possibile scrivere su <var>FileName</var> gli archi relativi al grafo
+<var>G</var>.
+Se <var>Type</var> = graph allora <var>G</var> sara' una stringa che rappresenta il nome del grafo.
+Se <var>Type</var> = edges allora <var>G</var> sara' una lista che conterra' la lista degli archi di
+<var>G</var>.
+<var>FileName</var> sara' un CSV che usera' \t come separatore e che conterra' vertice
+sorgente, vertice destinazione e peso dell'arco.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="prepare_output/2"><b class="pred">prepare_output</b><var class="arglist">(+Arc:list, -Row:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>Arc</var></td><td class="argdescr">- Rappresentazione di un arco</td></tr>
+<tr><td><var>Row</var></td><td class="argdescr">- Rappresentazione di un arco senza il nome del grafo
+
+<p>
+True se <var>Row</var> contiene la rappresentazione dell'arco senza il nome del grafo.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+</body>
+</html>

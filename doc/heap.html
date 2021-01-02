@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>heap.pl -- Heap</title>
+
+<link rel="stylesheet" type="text/css" href="pldoc.css">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+
+
+<h1 class="file"><span style="float:right"></span>heap.pl -- Heap</h1>
+
+<p>
+Libreria per la gestione di un MinHeap.</p>
+
+<dl class="tags">
+<dt class="keyword-author">author</dt><dd class="keyword-author">- Davide Costantini</dd>
+<dt class="keyword-version">version</dt><dd class="keyword-version">- 1.0</dd>
+</dl>
+
+<dl>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap/2"><b class="pred">heap</b><var class="arglist">(+H:string, +S:int)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>S</var></td><td class="argdescr">- Dimensione attuale dell'heap.
+
+<p>
+Rappresentazione di uno heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap_entry/4"><b class="pred">heap_entry</b><var class="arglist">(+H:string, +P:int, +K:int, +V:string)</var></a> is <b class="det">det</b></dt>
+<dt class="pubdef"><b class="pred">heap_entry</b><var class="arglist">(+H:string, +P:int, +K:int, +V:int)</var> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>P</var></td><td class="argdescr">- Posizione dell'elemento all'interno dell'heap</td></tr>
+<tr><td><var>K</var></td><td class="argdescr">- Chiave dell'elemento</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Valore dell'elemento
+
+<p>
+Rappresentazione di un elemento all'interno dell'heap.
+Il manentimento della proprieta' di heap viene effettuato in base alla
+chiave.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="new_heap/1"><b class="pred">new_heap</b><var class="arglist">(+H:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap
+
+<p>
+True se <var>H</var> rappresenta uno heap. Se al momento della chiamata <var>H</var> non
+rappresenta uno heap allora viene asserito un nuovo heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="delete_heap/1"><b class="pred">delete_heap</b><var class="arglist">(+H:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap
+
+<p>
+True se e' stato possibile ritrattare tutti i fatti relativi all'heap <var>H</var>
+(compresi gli heap_entry).</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap_has_size/2"><b class="pred">heap_has_size</b><var class="arglist">(+H:string, -S:int)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>S</var></td><td class="argdescr">- Dimensione dell'heap
+
+<p>
+True se <var>S</var> e' la dimensione dell'heap <var>H</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap_empty/1"><b class="pred">heap_empty</b><var class="arglist">(+H:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap
+
+<p>
+True se l'heap <var>H</var> e' vuoto.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap_not_empty/1"><b class="pred">heap_not_empty</b><var class="arglist">(+H:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap
+
+<p>
+True se l'heap <var>H</var> non e' vuoto.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap_head/3"><b class="pred">heap_head</b><var class="arglist">(+H:string, -K:int, -V:string)</var></a> is <b class="det">det</b></dt>
+<dt class="pubdef"><b class="pred">heap_head</b><var class="arglist">(+H:string, -K:int, -V:int)</var> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>K</var></td><td class="argdescr">- Chiave dell'elemento in testa all'heap</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Valore dell'elemento in testa all'heap
+
+<p>
+True se <var>K</var> e <var>V</var> sono rispettivamente la chiave ed il valore dell'elemento in
+testa all'heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap_insert/3"><b class="pred">heap_insert</b><var class="arglist">(+H:string, +K:int, +V:string)</var></a> is <b class="det">det</b></dt>
+<dt class="pubdef"><b class="pred">heap_insert</b><var class="arglist">(+H:string, +K:int, +V:int)</var> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>K</var></td><td class="argdescr">- Chiave dell'elemento da inserire nell'heap</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Valore dell'elemento da inserire nell'heap
+
+<p>
+True se e' stato possibile asserire un nuovo heap_entry con chiave <var>K</var> e valore
+<var>V</var> e l'heap soddisfa ancora la proprieta' di heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heapify_insert/2"><b class="pred">heapify_insert</b><var class="arglist">(+H:string, +I:int)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>I</var></td><td class="argdescr">- Indice della testa del sottoalbero
+
+<p>
+True se l'heap <var>H</var> soddisfa la proprieta' di heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heap_extract/3"><b class="pred">heap_extract</b><var class="arglist">(+H:string, -K:int, -V:string)</var></a> is <b class="det">det</b></dt>
+<dt class="pubdef"><b class="pred">heap_extract</b><var class="arglist">(+H:string, -K:int, -V:int)</var> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>K</var></td><td class="argdescr">- Chiave dell'elemento in testa all'heap</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Valore dell'elemento in testa all'heap
+
+<p>
+True se e' stato possibile estrarre l'elemento in testa all'heap, <var>K</var> e <var>V</var> sono
+rispettivamente la sua chiave ed il suo valore e l'heap <var>H</var> soddisfa ancora la
+proprieta' di heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="heapify/2"><b class="pred">heapify</b><var class="arglist">(+H:string, +I:int)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>I</var></td><td class="argdescr">- Indice della testa del sottoalbero
+
+<p>
+True se il sottoalbero dell'heap <var>H</var> con radice nell'elemento <var>I</var> soddisfa la
+proprieta' di heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="smallest/4"><b class="pred">smallest</b><var class="arglist">(+H:string, +X:int, +Y:int, -Smallest:int)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>X</var></td><td class="argdescr">- Posizione del primo elemento</td></tr>
+<tr><td><var>Y</var></td><td class="argdescr">- Posizione del secondo elemento</td></tr>
+<tr><td><var>Smallest</var></td><td class="argdescr">- Posizione dell'elemento piu' piccolo tra i due
+
+<p>
+True se <var>Smallest</var> e' l'elemento con chiave piu' piccola tra quello in posizione
+<var>X</var> e quello in posizione <var>Y</var> all'interno dell'heap <var>H</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="swap/3"><b class="pred">swap</b><var class="arglist">(+H:string, -K:int, -V:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>X</var></td><td class="argdescr">- Posizione del primo elemento</td></tr>
+<tr><td><var>Y</var></td><td class="argdescr">- Posizione del secondo elemento
+
+<p>
+True se e' stato possibile scambiare gli elementi in posizione X ed Y
+all'interno dell'heap <var>H</var> e se l'heap soddisfa ancora la proprieta' di heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="modify_key/4"><b class="pred">modify_key</b><var class="arglist">(+H:string, +NewKey:int, +OldKey:int, +V:string)</var></a> is <b class="det">det</b></dt>
+<dt class="pubdef"><b class="pred">modify_key</b><var class="arglist">(+H:string, +NewKey:int, +OldKey:int, +V:int)</var> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap</td></tr>
+<tr><td><var>NewKey</var></td><td class="argdescr">- Nuova chiave da assegnare all'elemento con chiave <var>OldKey</var> e
+valore <var>V</var></td></tr>
+<tr><td><var>OldKey</var></td><td class="argdescr">- Chiave dell'elemento da modificare</td></tr>
+<tr><td><var>V</var></td><td class="argdescr">- Valore dell'elemento da modificare
+
+<p>
+True se e' stato possibile modificare l'elemento dell'heap <var>H</var> con chiave
+<var>OldKey</var> e valore <var>V</var> impostando <var>NewKey</var> come nuova chiave e l'heap soddisfa
+ancora la proprieta' di heap.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="list_heap/1"><b class="pred">list_heap</b><var class="arglist">(+H:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+
+<dl class="tags">
+<dt class="tag">Arguments:</dt><dd>
+
+<table class="arglist">
+<tr><td><var>H</var></td><td class="argdescr">- Nome dell'heap
+
+<p>
+Stampa tutte le heap_entry relative all'heap <var>H</var>.</p></td></tr>
+</table>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+</body>
+</html>
