@@ -411,4 +411,63 @@ mst_adjs(G, V, [A | As]) :-
 
 % Questo predicato è vero quando PreorderTree è una lista degli archi del MST ordinata secondo un attraversamento preorderdello stesso, 
 % fatta rispetto al peso dell’arco.
-% mst_get(G, Source, PreorderTree)
+
+mst_get(G, Source, _) :-
+    findall(C, vertex_previous(G, C, Source), []),
+    !.
+
+mst_get(G, Source, PreorderTree) :-
+    findall(C, vertex_previous(G, C, Source), Cs),
+    mst_childs_weight(G, Cs, Us),
+    sort(1, @=<, Us, STemp),
+    sort(2, =<, STemp, Sorted),
+    mst_build_tree(G, Source, Sorted, Tree),
+    flatten(Tree, PreorderTree).
+
+mst_childs_weight(_, [], []) :- 
+    !.
+
+mst_childs_weight(G, [C | Cs], [U | Us]) :- 
+    !,
+    vertex_key(G, C, W),
+    U =.. [child, C, W],
+    mst_childs_weight(G, Cs, Us).
+
+mst_build_tree(_, _, [], []) :- 
+    !.
+
+mst_build_tree(G, P, [U | Us], [A | Ts]) :-
+    U =.. [_, C, W],
+    vertex_previous(G, _, C),
+    arc(G, P, C, W),
+    !,
+    T =.. [arc, G, P, C, W],
+    mst_get(G, C, Bs),
+    append([T], Bs, A),
+    mst_build_tree(G, P, Us, Ts).
+
+mst_build_tree(G, P, [U | Us], [A | Ts]) :-
+    U =.. [_, C, W],
+    vertex_previous(G, _, C),
+    arc(G, C, P, W),
+    !,
+    T =.. [arc, G, C, P, W],
+    mst_get(G, C, Bs),
+    append([T], Bs, A),
+    mst_build_tree(G, P, Us, Ts).
+
+mst_build_tree(G, P, [U | Us], [T | Ts]) :-
+    U =.. [_, C, W],
+    not(vertex_previous(G, _, C)),
+    arc(G, P, C, W),
+    !,
+    T =.. [arc, G, P, C, W],
+    mst_build_tree(G, P, Us, Ts).
+
+mst_build_tree(G, P, [U | Us], [T | Ts]) :-
+    U =.. [_, C, W],
+    not(vertex_previous(G, _, C)),
+    arc(G, C, P, W),
+    !,
+    T =.. [arc, G, C, P, W],
+    mst_build_tree(G, P, Us, Ts).
