@@ -40,7 +40,7 @@ Libreria per il calcolo del Minimum Spanning Tree di un grafo.
 
 :- dynamic vertex_previous/3.
 
-%!  mst_prim(+G:string, -Source:string) is det.
+%!  mst_prim(+G:string, +Source:string) is det.
 %
 %   @arg G      Nome del grafo di si vuole calcolare l'albero
 %   @arg Source Nome del nodo di partenza dell'albero 

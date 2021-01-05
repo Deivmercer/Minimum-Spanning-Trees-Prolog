@@ -100,7 +100,7 @@ rappresenta un grafo allora verra' asserito un nuovo grafo.</p></td></tr>
 
 <p>
 True se e' stato possibile ritrattare tutti i fatti relativi al grafo
-(compresi i vertici e gli archi).</p></td></tr>
+(compresi vertici, archi e fatti relativi al suo MST).</p></td></tr>
 </table>
 
 </dd>
@@ -253,24 +253,6 @@ True se <var>Vs</var> e' la lista dei vertici adiacenti a <var>V</var> nel grafo
 </dl>
 
 </dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="merge/3"><b class="pred">merge</b><var class="arglist">(+Xs:list, +Ys:list, -Zs:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
-
-<dl class="tags">
-<dt class="tag">Arguments:</dt><dd>
-
-<table class="arglist">
-<tr><td><var>Xs</var></td><td class="argdescr">- Lista iniziale</td></tr>
-<tr><td><var>Ys</var></td><td class="argdescr">- Lista con cui effettuare il merge</td></tr>
-<tr><td><var>Zs</var></td><td class="argdescr">- Lista contenente gli elementi di <var>Xs</var> ed <var>Ys</var>
-
-<p>
-True se <var>Zs</var> contiene gli elementi di <var>Xs</var> seguiti dagli elementi di <var>Ys</var></p></td></tr>
-</table>
-
-</dd>
-</dl>
-
-</dd>
 <dt class="pubdef"><span style="float:right">&nbsp;</span><a name="list_arcs/1"><b class="pred">list_arcs</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
 
 <dl class="tags">
@@ -373,9 +355,10 @@ True se e' stato possibile scrivere su <var>FileName</var> gli archi relativi al
 <p>
 True se e' stato possibile scrivere su <var>FileName</var> gli archi relativi al grafo
 <var>G</var>.
-Se <var>Type</var> = graph allora <var>G</var> sara' una stringa che rappresenta il nome del grafo.
-Se <var>Type</var> = edges allora <var>G</var> sara' una lista che conterra' la lista degli archi di
-<var>G</var>.
+Se <var>Type</var> = graph allora <var>G</var> sara' una stringa che rappresenta il nome del
+grafo.
+Se <var>Type</var> = edges allora <var>G</var> sara' una lista che conterra' la lista degli archi
+di <var>G</var>.
 <var>FileName</var> sara' un CSV che usera' \t come separatore e che conterra' vertice
 sorgente, vertice destinazione e peso dell'arco.</p></td></tr>
 </table>

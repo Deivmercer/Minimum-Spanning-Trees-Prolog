@@ -18,7 +18,7 @@
 
 /** <module> Heap
 
-Libreria per la gestione di un MinHeap.
+Libreria per la gestione di MinHeap.
 
 @author Davide Costantini
 @version 1.0
@@ -123,8 +123,8 @@ heap_head(H, K, V) :-
 %   @arg K  Chiave dell'elemento da inserire nell'heap
 %   @arg V  Valore dell'elemento da inserire nell'heap
 %
-%   True se e' stato possibile asserire un nuovo heap_entry con chiave K e valore
-%   V e l'heap soddisfa ancora la proprieta' di heap.
+%   True se e' stato possibile asserire un nuovo heap_entry con chiave K e
+%   valore V e l'heap soddisfa ancora la proprieta' di heap.
 
 heap_insert(H, K, V) :-
     heap(H, S),
@@ -204,7 +204,6 @@ heap_extract(H, K, V) :-
 %
 %   True se il sottoalbero dell'heap H con radice nell'elemento I soddisfa la 
 %   proprieta' di heap.
-
 heapify(H, I) :- 
     L is I * 2,
     R is I * 2 + 1,
@@ -228,8 +227,8 @@ heapify(H, I) :-
 %   @arg Y          Posizione del secondo elemento
 %   @arg Smallest   Posizione dell'elemento piu' piccolo tra i due
 %
-%   True se Smallest e' l'elemento con chiave piu' piccola tra quello in posizione
-%   X e quello in posizione Y all'interno dell'heap H.
+%   True se Smallest e' l'elemento con chiave piu' piccola tra quello in 
+%   posizione X e quello in posizione Y all'interno dell'heap H.
 
 smallest(H, X, Y, Smallest) :-
     heap_has_size(H, S),
