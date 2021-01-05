@@ -58,8 +58,6 @@ Libreria per la gestione di grafi diretti, connessi e con cicli.
 
 :- dynamic arc/4.
 
-% Questo predicato inserisce un nuovo grafo nella base-dati Prolog.
-
 %!  new_graph(+G:string) is det.
 %
 %   @arg G  Nome del grafo
@@ -80,12 +78,14 @@ new_graph(G) :-
 %   @arg G  Nome del grafo
 %
 %   True se e' stato possibile ritrattare tutti i fatti relativi al grafo
-%   (compresi i vertici e gli archi).
+%   (compresi vertici, archi e fatti relativi al suo MST).
 
 delete_graph(G) :-
     retract(graph(G)),
     retractall(vertex(G, _)),
-    retractall(arc(G, _, _, _)).
+    retractall(arc(G, _, _, _)),
+    retractall(mst:vertex_key(G, _, _)),
+    retractall(mst:vertex_previous(G, _, _)).
 
 %!  new_vertex(+G:string, +V:string) is det.
 %
@@ -94,6 +94,7 @@ delete_graph(G) :-
 %
 %   True se V rappresenta un vertice del grafo V. Se V non rappresenta un 
 %   vertice del grafo V, allora verra' asserito un nuovo vertice.
+
 new_vertex(G, V) :-
     vertex(G, V),
     !.
@@ -200,9 +201,6 @@ graph_arcs(G, Es) :-
 vertex_neighbors(G, V, Ns) :-
     vertex(G, V),
     findall(arc(G, V, N, W), arc(G, V, N, W), Ns).
-
-% Questo predicato e' vero quando V e' un vertice di G e Vs e' una lista 
-%contenente i vertici ad esso adiacenti.
 
 %!  adjs(+G:string, +V:string, -Vs:list) is det.
 %
