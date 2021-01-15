@@ -24,10 +24,23 @@ Vi sono diversi algoritmi in grado di risolvere questi problemi, noti in lettera
 Lo scopo di questo progetto Ã¨ di implementare l'algoritmo di Prim (cfr., [CLR+09] 23.2) per la soluzione del problema MST per grafi non-diretti e connessi con pesi non negativi.
 Per procedere all'implementazione di questi algoritmi Ã¨ necessario - e, di fatto, Ã¨ la parte principale del progetto - produrre un'implementazione di un MINHEAP (o MINPRIORITYQUEUE).</p>
 
-<h2 class="wiki">Esecuzione</h2>
+<h2 class="wiki">Utilizzo</h2>
 
 <p>
-<code class="nofile">TODO</code>...</p>
+Per utilizzare la libreria MST Ã¨ necessario definire un grafo usando le funzioni della libreria graph. Ãˆ possibile caricare uno dei grafi di esempio presenti nella cartella grafi con il seguente predicato:</p>
+
+<pre class="code" ext="Prolog">
+read_graph(nome_grafo, 'nome_file.csv').</pre>
+
+<p>
+DopodichÃ©, per lanciare l'algoritmo di Prim sul grafo che Ã¨ stato definito, Ã¨ sufficiente utilizzare i seguenti predicati:</p>
+
+<pre class="code" ext="Prolog">
+mst_prim(nome_grafo, vertice_sorgente).     % Lancia l'algoritmo
+mst_get(nome_grafo, vertice_sorgente, T).   % Recupera il risultato</pre>
+
+<p>
+Dopo l'esecuzione di mst_get, la variabile T conterrÃ una lista contenente i nodi dell'MST visitati in preordine. Il vertice_sorgente utilizzato nei due predicati deve essere identico.</p>
 
 <h2 class="wiki">Riferimenti</h2>
 

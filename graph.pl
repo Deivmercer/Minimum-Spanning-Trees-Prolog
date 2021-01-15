@@ -93,7 +93,8 @@ delete_graph(G) :-
 %   @arg V  Nome del vertice
 %
 %   True se V rappresenta un vertice del grafo V. Se V non rappresenta un 
-%   vertice del grafo V, allora verra' asserito un nuovo vertice.
+%   vertice del grafo V, allora verra' asserito un nuovo vertice. Se G non
+%   rappresenta un grafo, allora verrà creato un nuovo grafo.
 
 new_vertex(G, V) :-
     vertex(G, V),
@@ -133,10 +134,10 @@ list_vertices(G) :-
 %   @arg W  Peso dell'arco
 %
 %   True se all'interno del grafo e' presente un grafo da U a V con peso W. Se
-%   al momento della chiamata questo arco non esiste allora viene asserito. Se 
-%   e' gia' presente un arco da U a V con peso diverso da W allora l'arco viene
-%   modificato in modo che il peso sia W.
-%   Notare che gli archi sono bidirezionali.
+%   al momento della chiamata questo arco non esiste, allora vengono asseriti
+%   gli archi da U a V e da V ad U. Se e' gia' presente un arco da U a V con
+%   peso diverso da W allora l'arco viene modificato in modo che il peso sia W.
+%   Se G non rappresenta un grafo, allora verrà creato un nuovo grafo.
 
 new_arc(G, U, V, Weight) :-
     arc(G, U, V, Weight),

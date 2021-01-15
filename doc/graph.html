@@ -13,7 +13,7 @@
 <h1 class="file"><span style="float:right"></span>graph.pl -- Graph</h1>
 
 <p>
-Libreria per la gestione di grafi diretti, connessi e con cicli.</p>
+Libreria per la gestione di grafi.</p>
 
 <dl class="tags">
 <dt class="keyword-author">author</dt><dd class="keyword-author">- Davide Costantini</dd>
@@ -118,7 +118,8 @@ True se e' stato possibile ritrattare tutti i fatti relativi al grafo
 
 <p>
 True se <var>V</var> rappresenta un vertice del grafo <var>V</var>. Se <var>V</var> non rappresenta un
-vertice del grafo <var>V</var>, allora verra' asserito un nuovo vertice.</p></td></tr>
+vertice del grafo <var>V</var>, allora verra' asserito un nuovo vertice. Se <var>G</var> non
+rappresenta un grafo, allora verrÃ creato un nuovo grafo.</p></td></tr>
 </table>
 
 </dd>
@@ -171,10 +172,10 @@ Stampa tutti i vertici relativi al grafo <var>G</var>.</p></td></tr>
 
 <p>
 True se all'interno del grafo e' presente un grafo da <var>U</var> a <var>V</var> con peso <var>W</var>. Se
-al momento della chiamata questo arco non esiste allora viene asserito. Se
-e' gia' presente un arco da <var>U</var> a <var>V</var> con peso diverso da <var>W</var> allora l'arco viene
-modificato in modo che il peso sia <var>W</var>.
-Notare che gli archi sono bidirezionali.</p></td></tr>
+al momento della chiamata questo arco non esiste, allora vengono asseriti
+gli archi da <var>U</var> a <var>V</var> e da <var>V</var> ad <var>U</var>. Se e' gia' presente un arco da <var>U</var> a <var>V</var> con
+peso diverso da <var>W</var> allora l'arco viene modificato in modo che il peso sia <var>W</var>.
+Se <var>G</var> non rappresenta un grafo, allora verrÃ creato un nuovo grafo.</p></td></tr>
 </table>
 
 </dd>

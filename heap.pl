@@ -124,7 +124,8 @@ heap_head(H, K, V) :-
 %   @arg V  Valore dell'elemento da inserire nell'heap
 %
 %   True se e' stato possibile asserire un nuovo heap_entry con chiave K e
-%   valore V e l'heap soddisfa ancora la proprieta' di heap.
+%   valore V e l'heap soddisfa ancora la proprieta' di heap. Se H non
+%   rappresenta un heap, allora verrà creato un nuovo heap.
 
 heap_insert(H, K, V) :-
     new_heap(H),
