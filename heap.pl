@@ -127,7 +127,7 @@ heap_head(H, K, V) :-
 %   valore V e l'heap soddisfa ancora la proprieta' di heap.
 
 heap_insert(H, K, V) :-
-    heap(H, S),
+    new_heap(H),
     retract(heap(H, S)),
     S1 is S + 1,
     assert(heap(H, S1)),

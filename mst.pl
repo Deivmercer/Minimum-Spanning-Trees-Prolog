@@ -123,31 +123,8 @@ mst_adjs(G, V, [A | As]) :-
 
 mst_adjs(G, V, [A | As]) :-
     A =.. [vertex, G, AV],
-    heap_entry(G, _, _, AV),
-    arc(G, AV, V, WNew),
-    vertex_key(G, AV, WOld),
-    WNew >= WOld,
-    !,
-    mst_adjs(G, V, As).
-
-mst_adjs(G, V, [A | As]) :-
-    A =.. [vertex, G, AV],
     heap_entry(G, _, AK, AV),
     arc(G, V, AV, WNew),
-    vertex_key(G, AV, WOld),
-    WNew < WOld,
-    !,
-    retract(vertex_key(G, AV, WOld)),
-    retract(vertex_previous(G, AV, _)),
-    assert(vertex_key(G, AV, WNew)),
-    assert(vertex_previous(G, AV, V)),
-    modify_key(G, WNew, AK, AV),
-    mst_adjs(G, V, As).
-
-mst_adjs(G, V, [A | As]) :-
-    A =.. [vertex, G, AV],
-    heap_entry(G, _, AK, AV),
-    arc(G, AV, V, WNew),
     vertex_key(G, AV, WOld),
     WNew < WOld,
     !,
@@ -221,28 +198,10 @@ mst_preorder_tree(G, P, [U | Us], [A | Ts]) :-
     append([T], Bs, A),
     mst_preorder_tree(G, P, Us, Ts).
 
-mst_preorder_tree(G, P, [U | Us], [A | Ts]) :-
-    U =.. [_, C, W],
-    vertex_previous(G, _, C),
-    arc(G, C, P, W),
-    !,
-    T =.. [arc, G, C, P, W],
-    mst_get(G, C, Bs),
-    append([T], Bs, A),
-    mst_preorder_tree(G, P, Us, Ts).
-
 mst_preorder_tree(G, P, [U | Us], [T | Ts]) :-
     U =.. [_, C, W],
     not(vertex_previous(G, _, C)),
     arc(G, P, C, W),
     !,
     T =.. [arc, G, P, C, W],
-    mst_preorder_tree(G, P, Us, Ts).
-
-mst_preorder_tree(G, P, [U | Us], [T | Ts]) :-
-    U =.. [_, C, W],
-    not(vertex_previous(G, _, C)),
-    arc(G, C, P, W),
-    !,
-    T =.. [arc, G, C, P, W],
     mst_preorder_tree(G, P, Us, Ts).

@@ -24,7 +24,7 @@
 
 /** <module> Graph
 
-Libreria per la gestione di grafi diretti, connessi e con cicli.
+Libreria per la gestione di grafi.
 
 @author Davide Costantini
 @version 1.0
@@ -100,7 +100,7 @@ new_vertex(G, V) :-
     !.
 
 new_vertex(G, V) :-
-    graph(G),
+    new_graph(G),
     assert(vertex(G, V)),
     !.
 
@@ -143,29 +143,20 @@ new_arc(G, U, V, Weight) :-
     !.
 
 new_arc(G, U, V, Weight) :-
-    arc(G, V, U, Weight),
-    !.
-
-new_arc(G, U, V, Weight) :-
     arc(G, U, V, _),
     !,
     retract(arc(G, U, V, _)),
-    assert(arc(G, U, V, Weight)).
-
-new_arc(G, U, V, Weight) :-
-    arc(G, V, U, _),
-    !,
     retract(arc(G, V, U, _)),
-    assert(arc(G, U, V, Weight)).
+    assert(arc(G, U, V, Weight)),
+    assert(arc(G, V, U, Weight)).
 
 new_arc(G, U, V, Weight) :-
     not(arc(G, U, V, _)),
-    not(arc(G, V, U, _)),
     !,
-    graph(G),
-    vertex(G, U),
-    vertex(G, V),
-    assert(arc(G, U, V, Weight)).
+    new_vertex(G, U),
+    new_vertex(G, V),
+    assert(arc(G, U, V, Weight)),
+    assert(arc(G, V, U, Weight)).
 
 %!  new_arc(+G:string, +U:string, +V:string) is det.
 %
@@ -212,9 +203,7 @@ vertex_neighbors(G, V, Ns) :-
 
 adjs(G, V, Vs) :- 
     vertex(G, V),
-    findall(vertex(G, U), arc(G, V, U, _), VOs),
-    findall(vertex(G, U), arc(G, U, V, _), VIs),
-    append(VOs, VIs, Vs).
+    findall(vertex(G, U), arc(G, V, U, _), Vs).
 
 %!  list_arcs(+G:string) is det.
 %
