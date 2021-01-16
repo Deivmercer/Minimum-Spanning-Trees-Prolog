@@ -256,7 +256,7 @@ smallest(H, X, Y, Smallest) :-
     !,
     Smallest is X.
 
-%!  swap(+H:string, -K:int, -V:string) is det.
+%!  swap(+H:string, -X:int, -Y:int) is det.
 %
 %   @arg H  Nome dell'heap
 %   @arg X  Posizione del primo elemento

@@ -51,11 +51,11 @@ Libreria per la gestione di grafi.
 %!  arc(+G:string, +U:string, +V:string, +W:int) is det.
 %
 %   @arg G  Nome del grafo
-%   @arg V  Nome del vertice sorgente
+%   @arg U  Nome del vertice sorgente
 %   @arg V  Nome del vertice destinazione
 %   @arg K  Peso dell'arco
 %
-%   Rappresentazione di un nodo dell'MST.
+%   Rappresentazione di un arco.
 
 :- dynamic arc/4.
 
