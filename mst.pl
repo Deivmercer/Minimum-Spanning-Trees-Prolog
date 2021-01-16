@@ -1,14 +1,14 @@
 :- module(mst,
-        [ vertex_key/3,
-          vertex_previous/3,
-          delete_mst/1,
-          mst_prim/2,
-          mst_prepare_queue/2,
-          mst_build_tree/1,
-          mst_adjs/3,
-          mst_get/3,
-          mst_childs_weight/3,
-          mst_preorder_tree/4 ]).
+          [ vertex_key/3,
+            vertex_previous/3,
+            delete_mst/1,
+            mst_prim/2,
+            mst_prepare_queue/2,
+            mst_build_tree/1,
+            mst_adjs/3,
+            mst_get/3,
+            mst_childs_weight/3,
+            mst_preorder_tree/4 ]).
 
 :- use_module(graph).
 :- use_module(heap).

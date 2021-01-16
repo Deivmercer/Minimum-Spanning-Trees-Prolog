@@ -1,24 +1,24 @@
 :- module(graph,
-        [ graph/1,
-          vertex/2,
-          arc/4,
-          new_graph/1,
-          delete_graph/1,
-          new_vertex/2,
-          graph_vertices/2,
-          list_vertices/1,
-          new_arc/3,
-          new_arc/4,
-          graph_arcs/2,
-          vertex_neighbors/3,
-          adjs/3,
-          list_arcs/1,
-          list_graph/1,
-          read_graph/2,
-          assert_results/2,
-          write_graph/2,
-          write_graph/3,
-          prepare_output/2 ]).
+          [ graph/1,
+            vertex/2,
+            arc/4,
+            new_graph/1,
+            delete_graph/1,
+            new_vertex/2,
+            graph_vertices/2,
+            list_vertices/1,
+            new_arc/3,
+            new_arc/4,
+            graph_arcs/2,
+            vertex_neighbors/3,
+            adjs/3,
+            list_arcs/1,
+            list_graph/1,
+            read_graph/2,
+            assert_results/2,
+            write_graph/2,
+            write_graph/3,
+            prepare_output/2 ]).
 
 :- use_module(library(csv)).
 :- use_module(mst).
@@ -82,6 +82,12 @@ new_graph(G) :-
 %   (compresi vertici, archi e fatti relativi al suo MST).
 
 delete_graph(G) :-
+    not(graph(G)),
+    !.
+
+delete_graph(G) :-
+    graph(G),
+    !,
     retract(graph(G)),
     retractall(vertex(G, _)),
     retractall(arc(G, _, _, _)),
