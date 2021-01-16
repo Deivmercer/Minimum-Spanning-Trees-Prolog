@@ -1,6 +1,7 @@
 :- module(mst,
         [ vertex_key/3,
           vertex_previous/3,
+          delete_mst/1,
           mst_prim/2,
           mst_prepare_queue/2,
           mst_build_tree/1,
@@ -40,6 +41,16 @@ Libreria per il calcolo del Minimum Spanning Tree di un grafo.
 
 :- dynamic vertex_previous/3.
 
+%!  delete_mst(+G:string) is det.
+%
+%   @arg G  Nome del grafo
+%
+%   True se e' stato possibile ritrattare tutti i fatti relativi all'MST.
+
+delete_mst(G) :-
+    retractall(vertex_key(G, _, _)),
+    retractall(vertex_previous(G, _, _)).
+
 %!  mst_prim(+G:string, +Source:string) is det.
 %
 %   @arg G      Nome del grafo di si vuole calcolare l'albero
@@ -51,6 +62,7 @@ Libreria per il calcolo del Minimum Spanning Tree di un grafo.
 
 mst_prim(G, Source) :-
     vertex(G, Source),
+    delete_mst(G),
     graph_vertices(G, Vs),
     new_heap(G),
     mst_prepare_queue(G, Vs),

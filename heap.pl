@@ -205,6 +205,7 @@ heap_extract(H, K, V) :-
 %
 %   True se il sottoalbero dell'heap H con radice nell'elemento I soddisfa la 
 %   proprieta' di heap.
+
 heapify(H, I) :- 
     L is I * 2,
     R is I * 2 + 1,

@@ -21,6 +21,7 @@
           prepare_output/2 ]).
 
 :- use_module(library(csv)).
+:- use_module(mst).
 
 /** <module> Graph
 
@@ -84,8 +85,7 @@ delete_graph(G) :-
     retract(graph(G)),
     retractall(vertex(G, _)),
     retractall(arc(G, _, _, _)),
-    retractall(mst:vertex_key(G, _, _)),
-    retractall(mst:vertex_previous(G, _, _)).
+    delete_mst(G).
 
 %!  new_vertex(+G:string, +V:string) is det.
 %
@@ -237,6 +237,7 @@ list_graph(G) :-
 %   vertice sorgente, vertice destinazione e peso dell'arco.
 
 read_graph(G, FileName) :-
+    delete_graph(G),
     csv_read_file(FileName, Rows, [functor(arc), arity(3), separator(0'\t)]),
     new_graph(G),
     maplist(assert_results(G), Rows).
