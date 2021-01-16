@@ -58,7 +58,8 @@ delete_mst(G) :-
 %
 %   True se e' stato possibile calcolare l'MST del grafo specificato, che verra'
 %   memorizzato nella base di conoscenza di Prolog all'interno dei fatti
-%   vertex_key e vertex_previous.
+%   vertex_key e vertex_previous. Se al momento della chiamata esiste gia' un
+%   MST per il grafo G allora verrà sovrascritto.
 
 mst_prim(G, Source) :-
     vertex(G, Source),

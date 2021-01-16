@@ -234,7 +234,8 @@ list_graph(G) :-
 %   True se e' stato possibile leggere e memorizzare nella base di conoscenza di
 %   Prolog gli archi relativi al grafo G contenuti in FileName.
 %   FileName deve essere un CSV che usa \t come separatore e che contiene 
-%   vertice sorgente, vertice destinazione e peso dell'arco.
+%   vertice sorgente, vertice destinazione e peso dell'arco. Se al momento della
+%   chiamata esiste gia' un grafo G, allora verrà sovrascritto.
 
 read_graph(G, FileName) :-
     delete_graph(G),

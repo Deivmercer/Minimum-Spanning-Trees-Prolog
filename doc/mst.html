@@ -57,138 +57,37 @@ Rappresentazione delle precedenze all'interno dell'MST.</p></td></tr>
 </dl>
 
 </dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="mst_prim/2"><b class="pred">mst_prim</b><var class="arglist">(+G:string, +Source:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
+<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="delete_mst/1"><b class="pred">delete_mst</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
 
 <dl class="tags">
 <dt class="tag">Arguments:</dt><dd>
 
 <table class="arglist">
-<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo di si vuole calcolare l'albero</td></tr>
-<tr><td><var>Source</var></td><td class="argdescr">- Nome del nodo di partenza dell'albero
+<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo
 
 <p>
-True se e' stato possibile calcolare l'MST del grafo specificato, che verra'
-memorizzato nella base di conoscenza di Prolog all'interno dei fatti
-vertex_key e vertex_previous.</p></td></tr>
+True se e' stato possibile ritrattare tutti i fatti relativi all'MST.</p></td></tr>
 </table>
 
 </dd>
 </dl>
 
 </dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="mst_prepare_queue/2"><b class="pred">mst_prepare_queue</b><var class="arglist">(+G:string, +Vs:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
-
-<dl class="tags">
-<dt class="tag">Arguments:</dt><dd>
-
-<table class="arglist">
-<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo di si vuole calcolare l'albero</td></tr>
-<tr><td><var>Vs</var></td><td class="argdescr">- La lista dei vertici del grafo.
-
-<p>
-True se e' stato possibile asserire i fatti vertex_key e vertex_previous
-iniziali per ogni vertice del grafo.</p></td></tr>
-</table>
-
-</dd>
 </dl>
 
-</dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="mst_build_tree/1"><b class="pred">mst_build_tree</b><var class="arglist">(+G:string)</var></a> is <b class="det">det</b></dt><dd class="defbody">
-
-<dl class="tags">
-<dt class="tag">Arguments:</dt><dd>
-
-<table class="arglist">
-<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo di si vuole calcolare l'albero
+<h2 class="undoc">Undocumented predicates</h2>
 
 <p>
-True se e' stato possibile calcolare l'MST del grafo specificato, che verra'
-memorizzato nella base di conoscenza di Prolog.</p></td></tr>
-</table>
+The following predicates are exported, but not or incorrectly documented.</p>
 
-</dd>
-</dl>
-
-</dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="mst_adjs/3"><b class="pred">mst_adjs</b><var class="arglist">(+G:string, +V:string, +As:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
-
-<dl class="tags">
-<dt class="tag">Arguments:</dt><dd>
-
-<table class="arglist">
-<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo di si vuole calcolare l'albero</td></tr>
-<tr><td><var>V</var></td><td class="argdescr">- Nome del vertice che si sta considerando</td></tr>
-<tr><td><var>As</var></td><td class="argdescr">- Lista dei vertici adiacenti a <var>V</var> all'interno del grafo <var>G</var>
-
-<p>
-True se e' stato possibile calcolare le posizioni all'interno dell'MST dei
-vertici adiacenti a <var>V</var>.</p></td></tr>
-</table>
-
-</dd>
-</dl>
-
-</dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="mst_get/3"><b class="pred">mst_get</b><var class="arglist">(+G:string, +Source:string, -PreorderTree:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
-
-<dl class="tags">
-<dt class="tag">Arguments:</dt><dd>
-
-<table class="arglist">
-<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo di si vuole calcolare l'albero</td></tr>
-<tr><td><var>Source</var></td><td class="argdescr">- Nome del nodo di partenza dell'albero (o sottoalbero)</td></tr>
-<tr><td><var>PreorderTree</var></td><td class="argdescr">- Lista degli archi ottenuti leggendo l'MST in preordine
-
-<p>
-True se e' stato possibile leggere l'MST in preordine rispetto al peso degli
-archi (se due archi hanno pari peso vengono ordinati lessicograficamente) e
-<var>PreorderTree</var> contiene la lista degli archi.</p></td></tr>
-</table>
-
-</dd>
-</dl>
-
-</dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="mst_childs_weight/3"><b class="pred">mst_childs_weight</b><var class="arglist">(+G:string, +Cs:list, -Us:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
-
-<dl class="tags">
-<dt class="tag">Arguments:</dt><dd>
-
-<table class="arglist">
-<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo di si vuole calcolare l'albero</td></tr>
-<tr><td><var>Cs</var></td><td class="argdescr">- Lista dei figli del nodo corrente</td></tr>
-<tr><td><var>Us</var></td><td class="argdescr">- Lista dei figli associati al loro peso
-
-<p>
-True se <var>Us</var> contiene la lista dei figli del nodo corrente associato al loro
-peso all'interno dell'MST. L'associazione e' rappresentata come <code>child(C, W)</code>,
-dove C e' il nome del nodo figlio e W e' il peso.</p></td></tr>
-</table>
-
-</dd>
-</dl>
-
-</dd>
-<dt class="pubdef"><span style="float:right">&nbsp;</span><a name="mst_preorder_tree/4"><b class="pred">mst_preorder_tree</b><var class="arglist">(+G:string, +P:string, +Us:list, -Ts:list)</var></a> is <b class="det">det</b></dt><dd class="defbody">
-
-<dl class="tags">
-<dt class="tag">Arguments:</dt><dd>
-
-<table class="arglist">
-<tr><td><var>G</var></td><td class="argdescr">- Nome del grafo di si vuole calcolare l'albero</td></tr>
-<tr><td><var>P</var></td><td class="argdescr">- Nome del nodo di partenza dell'albero (o sottoalbero)</td></tr>
-<tr><td><var>Us</var></td><td class="argdescr">- Lista dei nodi figli di <var>P</var></td></tr>
-<tr><td><var>Ts</var></td><td class="argdescr">- Lista degli archi ottenuti leggendo l'MST in preordine
-
-<p>
-True se <var>Ts</var> contiene la lista degli archi ottenuti leggendo l'MST.</p></td></tr>
-</table>
-
-</dd>
-</dl>
-
-</dd>
+<dl class="undoc">
+<dt class="undoc"><span style="float:right">&nbsp;</span><a name="mst_build_tree/1"><b class="pred">mst_build_tree</b><var class="arglist">(Arg1)</var></a></dt>
+<dt class="undoc"><span style="float:right">&nbsp;</span><a name="mst_get/3"><b class="pred">mst_get</b><var class="arglist">(Arg1, Arg2, Arg3)</var></a></dt>
+<dt class="undoc"><span style="float:right">&nbsp;</span><a name="mst_childs_weight/3"><b class="pred">mst_childs_weight</b><var class="arglist">(Arg1, Arg2, Arg3)</var></a></dt>
+<dt class="undoc"><span style="float:right">&nbsp;</span><a name="mst_adjs/3"><b class="pred">mst_adjs</b><var class="arglist">(Arg1, Arg2, Arg3)</var></a></dt>
+<dt class="undoc"><span style="float:right">&nbsp;</span><a name="mst_prepare_queue/2"><b class="pred">mst_prepare_queue</b><var class="arglist">(Arg1, Arg2)</var></a></dt>
+<dt class="undoc"><span style="float:right">&nbsp;</span><a name="mst_prim/2"><b class="pred">mst_prim</b><var class="arglist">(Arg1, Arg2)</var></a></dt>
+<dt class="undoc"><span style="float:right">&nbsp;</span><a name="mst_preorder_tree/4"><b class="pred">mst_preorder_tree</b><var class="arglist">(Arg1, Arg2, Arg3, Arg4)</var></a></dt>
 </dl>
 
 </body>

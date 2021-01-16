@@ -21,4 +21,5 @@ mst_get:    0.0 secondi
 
 mst_prim:   3.9 secondi  
 mst_get:    0.2 secondi  
+
 ![primkiller]
